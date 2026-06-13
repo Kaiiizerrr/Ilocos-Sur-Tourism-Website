@@ -1,0 +1,1728 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ilocos Sur Province</title>
+
+  <!-- Bootstrap framework retained (CDN) for responsive layout, offcanvas & modal -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" crossorigin="anonymous">
+
+  <!-- Heritage display + body typefaces -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+  <style>
+/* ===========================================================================
+   This is the ENTIRE site in one file: markup, styles, and behavior.
+   The original Flask backend, database, and template/static split have been
+   collapsed into this single HTML document. The "API" and the registration
+   "transaction" now run client-side as asynchronous (AJAX-style) JavaScript,
+   and routing between the homepage, each category, the form, and the
+   confirmation page is handled by a small hash-based router.
+
+   The block below is the original stylesheet, followed by an
+   "IMAGE BACKGROUND ADAPTATIONS" block that swaps the flat beige for a
+   full-bleed scenic background (Bing-style) across every route.
+   =========================================================================== */
+/* ===========================================================================
+   styles.css — Ilocos Sur Tourism Portal
+   Custom styling layered on top of Bootstrap (PRD §3).
+
+   Design direction: drawn from Vigan's own materials —
+     · burnay terracotta clay        (the clay variables)
+     · cobblestone charcoal          (Calle Crisologo at dusk)
+     · antique limestone cream       (heritage facades)
+     · glazed tile teal accent       (capiz-window trim)
+   Every color and font here lives in one place so collaborators can re-skin
+   the whole portal without touching markup or logic.
+   =========================================================================== */
+
+:root {
+  /* Palette */
+  --clay:        #b34a2a;
+  --clay-deep:   #8f3a20;
+  --clay-soft:   #d9836a;
+  --char:        #2a2521;
+  --char-soft:   #4a423b;
+  --cream:       #f6f0e4;
+  --cream-2:     #efe6d4;
+  --paper:       #fffdf8;
+  --teal:        #1f6f66;
+  --gold:        #c89535;
+  --line:        #e3d6bf;
+
+  /* Type */
+  --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Inter", "Segoe UI", system-ui, sans-serif;
+
+  /* Bootstrap overrides */
+  --bs-body-font-family: var(--font-body);
+  --bs-body-color: var(--char);
+  --bs-body-bg: var(--cream);
+}
+
+* { -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--char);
+  background: var(--cream);
+  /* Leave room for the fixed top bar */
+  padding-top: 60px;
+}
+
+.container { max-width: 1120px; }
+
+/* ---------------------------------------------------------------------------
+   Display headings — heavy, with a restrained double-shadow that nods to the
+   embossed poster lettering in the PRD mockups (the one deliberate flourish).
+   --------------------------------------------------------------------------- */
+.display-title,
+.hero-title,
+.section-title,
+.cat-title,
+.info-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  color: var(--char);
+}
+
+.display-title {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.10);
+  margin: 0;
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+}
+
+.section-lead { color: var(--char-soft); margin-bottom: 1.75rem; }
+
+/* ===========================================================================
+   TOP BAR + HAMBURGER
+   =========================================================================== */
+.topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  background: var(--char);
+  color: var(--cream);
+  z-index: 1040;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.18);
+}
+
+.hamburger {
+  width: 46px; height: 40px;
+  display: inline-flex; flex-direction: column;
+  justify-content: center; gap: 5px;
+  padding: 0 9px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.hamburger:hover,
+.hamburger:focus-visible { background: rgba(255,255,255,0.12); }
+.hamburger span {
+  display: block; height: 3.5px; border-radius: 2px;
+  background: var(--cream);
+  transition: transform 0.2s ease;
+}
+
+.topbar-brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  color: var(--cream);
+  text-decoration: none;
+}
+.topbar-brand:hover { color: var(--clay-soft); }
+
+.topbar-cta {
+  margin-left: auto;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--char);
+  background: var(--gold);
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+.topbar-cta:hover { background: #d9a942; transform: translateY(-1px); color: var(--char); }
+
+/* ===========================================================================
+   CATEGORIES OFFCANVAS (scrollable)
+   =========================================================================== */
+.cat-offcanvas {
+  width: min(360px, 86vw);
+  background: var(--cream);
+  border-right: 4px solid var(--clay);
+}
+.cat-offcanvas .offcanvas-header {
+  background: var(--char);
+  color: var(--cream);
+  padding: 1.1rem 1.25rem;
+}
+.cat-title {
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+  margin: 0;
+}
+.cat-offcanvas .btn-close {
+  filter: invert(1) grayscale(1) brightness(1.6);
+}
+
+.cat-scroll { overflow-y: auto; padding: 0.5rem 0; }
+.cat-nav { display: flex; flex-direction: column; }
+
+.cat-link {
+  display: block;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--char);
+  transition: background 0.14s ease, padding-left 0.14s ease;
+}
+.cat-link:hover { background: var(--cream-2); padding-left: 1.6rem; }
+.cat-link.is-active {
+  background: var(--cream-2);
+  box-shadow: inset 4px 0 0 var(--clay);
+}
+.cat-link-title {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.12rem;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.cat-link-tag { display: block; font-size: 0.82rem; color: var(--char-soft); }
+
+.cat-link--cta { background: rgba(179,74,42,0.08); }
+.cat-link--cta .cat-link-title { color: var(--clay-deep); }
+
+.offcanvas-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--char-soft);
+}
+
+/* ===========================================================================
+   HERO + HISTORY (homepage)
+   =========================================================================== */
+.hero { background: linear-gradient(180deg, var(--cream) 0%, var(--cream-2) 100%); padding: 3rem 0 1rem; }
+.hero-inner { text-align: center; }
+.hero-eyebrow {
+  text-transform: uppercase; letter-spacing: 0.18em;
+  font-size: 0.78rem; font-weight: 700; color: var(--clay);
+  margin-bottom: 0.25rem;
+}
+.hero-title { font-size: clamp(3rem, 9vw, 6rem); text-shadow: 3px 3px 0 rgba(0,0,0,0.10); }
+.hero-sub { color: var(--char-soft); font-size: 1.05rem; max-width: 36ch; margin: 0.5rem auto 1.75rem; }
+
+.hero-frame {
+  margin: 0 auto;
+  max-width: 1000px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 18px 40px rgba(42,37,33,0.14);
+}
+.hero-img { width: 100%; height: auto; border-radius: 12px; display: block; }
+
+.history { padding: 3.25rem 0; }
+.history-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--clay);
+  border-radius: 14px;
+  padding: 1.75rem 1.9rem;
+  box-shadow: 0 10px 26px rgba(42,37,33,0.07);
+  max-height: 460px;          /* PRD: history block is scrollable */
+  overflow-y: auto;
+  justify-content: center;
+  text-align: justify;
+}
+.history-card p { margin-bottom: 1rem; line-height: 1.75; }
+.history-card p:last-child { margin-bottom: 0; }
+
+/* ===========================================================================
+   EXPLORE GRID (homepage shortcuts)
+   =========================================================================== */
+.explore { padding: 1rem 0 3.5rem; }
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.1rem;
+}
+.explore-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--char);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.explore-card:hover { transform: translateY(-4px); box-shadow: 0 16px 30px rgba(42,37,33,0.13); color: var(--char); }
+.explore-thumb { width: 100%; aspect-ratio: 3/2; object-fit: cover; display: block; }
+.explore-body { padding: 0.85rem 1rem 1.1rem; }
+.explore-name { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; margin: 0 0 0.2rem; }
+.explore-tag { font-size: 0.85rem; color: var(--char-soft); margin: 0; }
+
+/* ===========================================================================
+   CATEGORY PAGE — scrollable card grid
+   =========================================================================== */
+.category { padding: 2.5rem 0 3.5rem; }
+.category-head { margin-bottom: 1.75rem; }
+.category-tag { color: var(--char-soft); margin-top: 0.4rem; font-size: 1.05rem; }
+
+.cards-status {
+  display: flex; align-items: center; gap: 0.65rem;
+  color: var(--char-soft); padding: 1.5rem 0;
+}
+.cards-status[hidden] { display: none; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.25rem;
+  /* PRD: "Make this scrollable" — the grid scrolls within the viewport */
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  padding: 4px 4px 1.5rem;
+}
+
+/* The attraction card: gray card holding a white image placeholder, name,
+   and a "See Info" affordance — matching the FOOD #1 / FOOD #2 mockup. */
+.attraction-card {
+  background: var(--cream-2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 6px 16px rgba(42,37,33,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.attraction-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(42,37,33,0.15); }
+.attraction-media {
+  background: var(--paper);
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.attraction-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.attraction-name {
+  font-family: var(--font-display);
+  font-weight: 800; text-transform: uppercase;
+  font-size: 1.08rem; letter-spacing: -0.01em;
+  margin: 0.7rem 0 0.15rem;
+}
+.attraction-summary { font-size: 0.86rem; color: var(--char-soft); margin: 0 0 0.85rem; flex: 1; }
+.see-info {
+  align-self: flex-start;
+  font-weight: 600; font-size: 0.9rem;
+  color: var(--clay-deep);
+  background: transparent; border: 0; cursor: pointer;
+  padding: 0.25rem 0; 
+}
+.see-info::after { content: " →"; }
+.see-info:hover { color: var(--clay); text-decoration: underline; }
+
+/* ===========================================================================
+   INFO CARD MODAL — blurred background, sharp card (PRD §7)
+   The modal lives OUTSIDE .site-main (see base.html), so blurring the page
+   wrapper leaves the card itself perfectly sharp.
+   =========================================================================== */
+/* Blur everything behind the card while it's open. */
+body.info-modal-active .topbar,
+body.info-modal-active .site-main,
+body.info-modal-active .site-footer {
+  filter: blur(7px);
+  transition: filter 0.2s ease;
+}
+
+/* Soften Bootstrap's backdrop into a light frosted veil so the blurred page
+   shows through, instead of a heavy dark layer that hides everything. */
+body.info-modal-active .modal-backdrop.show {
+  --bs-backdrop-opacity: 0.28;
+  background-color: var(--char);
+}
+
+.info-modal .modal-content { border: 0; }
+.info-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
+.info-close {
+  position: absolute; top: 0.9rem; right: 0.9rem; z-index: 3;
+  background-color: var(--paper); border-radius: 50%;
+  padding: 0.55rem; opacity: 0.9;
+}
+.info-body { padding: 0; }
+.info-media { background: var(--cream-2); }
+.info-img { width: 100%; max-height: 280px; object-fit: cover; display: block; }
+.info-text { padding: 1.5rem 1.75rem 1.9rem; }
+.info-eyebrow {
+  text-transform: uppercase; letter-spacing: 0.16em;
+  font-size: 0.74rem; font-weight: 800; color: var(--clay);
+  margin: 0 0 0.2rem;
+}
+.info-name { font-size: 1.9rem; text-transform: uppercase; margin: 0 0 0.35rem; }
+.info-location { color: var(--teal); font-weight: 600; font-size: 0.92rem; margin: 0 0 0.75rem; }
+.info-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+.info-chip {
+  font-size: 0.74rem; font-weight: 600;
+  background: var(--cream-2); color: var(--char-soft);
+  border: 1px solid var(--line);
+  padding: 0.22rem 0.6rem; border-radius: 999px;
+}
+.info-about { line-height: 1.7; margin-bottom: 1.25rem; }
+
+/* ===========================================================================
+   BUTTONS (clay)
+   =========================================================================== */
+.btn-clay {
+  background: var(--clay); border: 1px solid var(--clay);
+  color: var(--paper); font-weight: 600;
+  border-radius: 999px;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+.btn-clay:hover { background: var(--clay-deep); border-color: var(--clay-deep); color: var(--paper); transform: translateY(-1px); }
+.btn-outline-clay {
+  background: transparent; border: 1px solid var(--clay);
+  color: var(--clay-deep); font-weight: 600; border-radius: 999px;
+}
+.btn-outline-clay:hover { background: var(--clay); color: var(--paper); }
+
+/* ===========================================================================
+   REGISTRATION FORM
+   =========================================================================== */
+.register { padding: 2.5rem 0 4rem; }
+.register-inner { max-width: 760px; }
+.register-head { margin-bottom: 1.5rem; }
+.register-tag { color: var(--char-soft); margin-top: 0.5rem; }
+.register-form {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 12px 30px rgba(42,37,33,0.08);
+}
+.form-label { font-weight: 600; }
+.form-label .opt { font-weight: 400; color: var(--char-soft); font-size: 0.85em; }
+.form-control:focus, .form-select:focus {
+  border-color: var(--clay-soft);
+  box-shadow: 0 0 0 0.2rem rgba(179,74,42,0.18);
+}
+.field-error { color: #b3261e; font-size: 0.82rem; min-height: 1rem; margin-top: 0.25rem; }
+.is-invalid-field { border-color: #b3261e !important; }
+.register-actions { margin-top: 1.5rem; }
+.btn-spinner { margin-left: 0.5rem; }
+
+.form-banner {
+  margin-top: 1.25rem;
+  background: #fdecea; border: 1px solid #f5c6c0; color: #8a1c12;
+  border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.92rem;
+}
+
+/* ===========================================================================
+   CONFIRMATION / PROFILE
+   =========================================================================== */
+.confirm { padding: 2.75rem 0 4rem; }
+.confirm-inner { max-width: 720px; }
+.confirm-badge {
+  display: inline-block;
+  background: var(--teal); color: var(--paper);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.3rem 0.85rem; border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+.confirm-tag { color: var(--char-soft); margin: 0.5rem 0 1.5rem; }
+.profile-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 12px 30px rgba(42,37,33,0.08);
+}
+.profile-row {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: 0.85rem 0; border-bottom: 1px solid var(--line);
+}
+.profile-row:last-child { border-bottom: 0; }
+.profile-key { color: var(--char-soft); font-weight: 600; }
+.profile-val { text-align: right; font-weight: 500; word-break: break-word; }
+.confirm-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+
+/* ===========================================================================
+   FOOTER + 404
+   =========================================================================== */
+.site-footer {
+  background: var(--char); color: var(--cream);
+  text-align: center; padding: 2rem 1rem;
+}
+.site-footer .text-muted { color: #b9ad99 !important; }
+.notfound { padding: 5rem 0; }
+.notfound-lead { color: var(--char-soft); font-size: 1.1rem; margin: 1rem 0 1.75rem; }
+
+/* ===========================================================================
+   ACCESSIBILITY + MOTION
+   =========================================================================== */
+a:focus-visible, button:focus-visible, .form-control:focus-visible {
+  outline: 3px solid var(--gold); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+@media (max-width: 576px) {
+  .topbar-brand { display: none; }
+  .info-name { font-size: 1.55rem; }
+  .card-grid { max-height: none; overflow: visible; } /* let page scroll on phones */
+}
+
+
+/* ===========================================================================
+   IMAGE BACKGROUND ADAPTATIONS (single-file build)
+   A full-bleed dusk image sits behind every view. Large titles and the text
+   that floats directly on the photo are lightened for contrast, while the
+   content panels (cards, forms) keep their solid surfaces for readability.
+   To use a real photo instead of the built-in scene, replace the --bg-image
+   URL below with your own (e.g. url("static/img/vigan.jpg")). It applies to
+   every route automatically.
+   =========================================================================== */
+:root{
+  --bg-image: url("app-images/IlocosBG.jpg");
+  --scrim: linear-gradient(180deg, rgba(11, 8, 6, 0.42) 0%, rgba(24,15,10,0.26) 42%, rgba(24,15,10,0.40) 100%);
+}
+body{
+  background-image: var(--scrim), var(--bg-image);
+  background-repeat: no-repeat, no-repeat;
+  background-size: cover, cover;
+  background-position: center top, center top;
+  background-attachment: fixed, fixed;
+  min-height: 100vh;
+}
+.hero{ background: transparent; }
+.hero-title,.section-title,.display-title{
+  color:#fff6e9;
+  text-shadow:0 2px 18px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.6);
+}
+/* keep the modal title dark on its paper card */
+.info-name{ color:var(--char); text-shadow:none; }
+.hero-eyebrow{ color:#ffd9a8; text-shadow:0 1px 8px rgba(0,0,0,0.55); }
+.hero-sub,.section-lead,.category-tag,.register-tag,.confirm-tag,.notfound-lead{
+  color:rgba(255,248,238,0.96);
+  text-shadow:0 1px 10px rgba(0,0,0,0.55);
+}
+.cards-status{ color:rgba(255,248,238,0.96); text-shadow:0 1px 8px rgba(0,0,0,0.55); }
+.cards-status .spinner-border{ color:#fff6e9; }
+.history-card,.hero-frame,.explore-card,.attraction-card,.register-form,.profile-card{
+  box-shadow:0 18px 44px rgba(0,0,0,0.28);
+}
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR — the three-lined (hamburger) icon at the top-left opens the
+       Categories menu, exactly as in the original design. -->
+  <header class="topbar">
+    <button class="hamburger" type="button"
+            data-bs-toggle="offcanvas" data-bs-target="#categoriesMenu"
+            aria-controls="categoriesMenu" aria-label="Open categories menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="topbar-brand" href="#/">Ilocos&nbsp;Sur</a>
+    <a class="topbar-cta" href="#/register">Book&nbsp;a&nbsp;Visit</a>
+  </header>
+
+  <!-- CATEGORIES OFFCANVAS — slides in from the left, body is scrollable.
+       Its links are built from the data by JavaScript. -->
+  <div class="offcanvas offcanvas-start cat-offcanvas" tabindex="-1"
+       id="categoriesMenu" aria-labelledby="categoriesMenuLabel">
+    <div class="offcanvas-header">
+      <h2 class="cat-title" id="categoriesMenuLabel">Categories</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+              aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body cat-scroll">
+      <nav class="cat-nav" id="catNav"><!-- built by JS --></nav>
+    </div>
+    <div class="offcanvas-footer"><small>Ilocos Sur Tourism Portal</small></div>
+  </div>
+
+  <!-- MAIN CONTENT — each route renders here -->
+  <main class="site-main" id="app"></main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="mb-1"><strong>Ilocos Sur Tourism Portal</strong></p>
+      <p class="mb-0 text-muted small">
+        Final Requirement for the course <strong>COMP 016</strong> &middot; Web Development
+      </p>
+    </div>
+  </footer>
+
+  <!-- INFO CARD MODAL — kept OUTSIDE #app so the background can be blurred
+       while the card itself stays sharp. Filled in by JS on category pages. -->
+  <div class="modal fade info-modal" id="infoModal" tabindex="-1"
+       aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content info-card">
+        <button type="button" class="btn-close info-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+        <div class="modal-body info-body">
+          <div class="info-media">
+            <img id="infoImage" class="info-img" src="" alt="">
+          </div>
+          <div class="info-text">
+            <p class="info-eyebrow">About</p>
+            <h2 class="info-name" id="infoModalLabel"></h2>
+            <p class="info-location" id="infoLocation"></p>
+            <div class="info-tags" id="infoTags"></div>
+            <p class="info-about" id="infoAbout"></p>
+            <a class="btn btn-clay info-book" id="infoBook" href="#/register">
+              Plan a visit here
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS bundle (offcanvas, modal) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          crossorigin="anonymous"></script>
+
+  <script>
+/* ===========================================================================
+   ALL APPLICATION LOGIC (was: data/attractions.py, store.py, app.py,
+   ajax_handlers.js). Pure vanilla JavaScript.
+   =========================================================================== */
+(function () {
+  "use strict";
+
+  /* ----- content data (was data/attractions.py) ------------------------- */
+  var DATA = {
+  "categories": [
+    {
+      "slug": "food",
+      "title": "Food",
+      "tagline": "Ilocano delicacies that will satisfy your cuisine curiosity"
+    },
+    {
+      "slug": "beach",
+      "title": "Beach",
+      "tagline": "Breathtaking coves and golden shorelines"
+    },
+    {
+      "slug": "historical",
+      "title": "Historical / Educational",
+      "tagline": "Where Spanish-colonial heritage still stands"
+    },
+    {
+      "slug": "church",
+      "title": "Church / Religious",
+      "tagline": "Centuries-old faith in stone and brick"
+    },
+    {
+      "slug": "arts",
+      "title": "Arts, Crafts & Culture",
+      "tagline": "Showcases the artistic heritage of the province"
+    },
+    {
+      "slug": "festivals",
+      "title": "Festivals & Events",
+      "tagline": "The province at its most colorful"
+    },
+    {
+      "slug": "nature",
+      "title": "Nature & Adventure",
+      "tagline": "Beautiful landscapes and waterforms that tourists must explore"
+    },
+    {
+      "slug": "pasalubong",
+      "title": "Pasalubong (Souvenirs)",
+      "tagline": "Take a piece of Ilocos Sur home"
+    },
+    {
+      "slug": "stay",
+      "title": "Where to Stay",
+      "tagline": "Heritage inns and modern comfort"
+    },
+    {
+      "slug": "transportation",
+      "title": "Getting Around",
+      "tagline": "Calesa, tricycle, jeepney, and beyond"
+    }
+  ],
+  "items": {
+    "food": [
+      {
+        "id": "vigan-empanada",
+        "name": "Vigan Empanada",
+        "location": "Plaza Burgos, Vigan City",
+        "summary": "A crisp orange rice-flour shell stuffed with grated green papaya, Vigan longganisa, and a whole egg, deep-fried to order.",
+        "about": "The Vigan empanada is the city's most famous street food, cooked fresh in front of you at the stalls ringing Plaza Burgos. Unlike the Western pastry empanada, this version uses a rice-flour dough tinted orange with achuete (annatto). It is filled with grated unripe papaya, mongo beans, the garlicky local longganisa, and a cracked egg, then folded and fried until shatteringly crisp. It is served piping hot with a splash of sukang Iloko (sugarcane vinegar) spiked with chili and garlic.",
+        "tags": [
+          "street food",
+          "snack",
+          "must-try"
+        ],
+        "image": 'app-images/ViganEmpanada.jpg'
+      },
+      {
+        "id": "bagnet",
+        "name": "Bagnet",
+        "location": "Vigan City public market",
+        "summary": "Pork belly boiled, air-dried, then double-deep-fried into glassy, crackling crisp skin over tender meat.",
+        "about": "Bagnet is the Ilocano answer to crispy pork. The belly is simmered with salt and aromatics, dried, then fried twice so the skin blisters into a brittle, popcorn-like crunch while the meat stays moist. It is the heart of pinakbet and dinengdeng, but is just as happily eaten on its own dunked in KBL (kamatis-bagoong-lasona: tomato, fermented fish paste, and shallots).",
+        "tags": [
+          "pork",
+          "specialty",
+          "must-try"
+        ]
+      },
+      {
+        "id": "vigan-longganisa",
+        "name": "Vigan Longganisa",
+        "location": "Vigan City",
+        "summary": "Short, plump, intensely garlicky pork sausages cured with native sugarcane vinegar.",
+        "about": "Vigan longganisa is the de-recado (savory, not sweet) style: stubby pork sausages packed with crushed garlic, black pepper, and Ilocos cane vinegar. Cooked in their own fat until burnished, they are a breakfast staple served with garlic rice and egg, and are one of the province's most popular pasalubong.",
+        "tags": [
+          "sausage",
+          "breakfast",
+          "pasalubong"
+        ]
+      },
+      {
+        "id": "sinanglao",
+        "name": "Sinanglao",
+        "location": "Local carinderias, Vigan",
+        "summary": "A sour, beefy soup of innards brightened with kamias and bile, eaten at sunrise.",
+        "about": "Sinanglao is an acquired-taste breakfast soup beloved by locals: beef tripe and innards simmered until tender in a tart broth soured with kamias and given depth with a touch of bile. Served steaming with rice, it is the kind of dish you seek out in unmarked neighborhood eateries.",
+        "tags": [
+          "soup",
+          "breakfast",
+          "local favorite"
+        ]
+      },
+      {
+        "id": "pinakbet",
+        "name": "Pinakbet",
+        "location": "Everywhere in Ilocos Sur",
+        "summary": "The original Ilocano vegetable stew bound with bagoong isda and crowned with bagnet.",
+        "about": "Pinakbet (from 'pinakebbet', to shrivel) is the dish the whole country borrowed from the Ilocos region. Bitter melon, eggplant, okra, squash, long beans, and tomatoes are stewed together with bagoong isda (fermented fish paste) and topped with bagnet. The vegetables are deliberately left a little firm and intensely savory.",
+        "tags": [
+          "vegetable",
+          "stew",
+          "classic"
+        ]
+      },
+      {
+        "id": "royal-bibingka",
+        "name": "Royal Bibingka",
+        "location": "Vigan City",
+        "summary": "A dense, buttery, sticky-rice cake with a caramelized cheese top, sold warm in slabs.",
+        "about": "Royal bibingka is a Vigan delicacy made from galapong (ground glutinous rice), coconut, eggs, and butter, baked until the top caramelizes and a layer of cheese melts over it. Rich and chewy, it is a favorite pasalubong and a popular merienda treat.",
+        "tags": [
+          "dessert",
+          "rice cake",
+          "pasalubong"
+        ]
+      }
+    ],
+    "beach": [
+      {
+        "id": "mindoro-beach",
+        "name": "Mindoro Beach",
+        "location": "Barangay Mindoro, Vigan City",
+        "summary": "Vigan's closest coastline, a long stretch of brown-gold sand minutes from the heritage core.",
+        "about": "Mindoro Beach is the nearest seaside escape to Vigan City, a wide undeveloped stretch of sand facing the West Philippine Sea. It is a favorite of locals for sunsets and weekend picnics, and a quick tricycle ride from Calle Crisologo.",
+        "tags": [
+          "sunset",
+          "near city",
+          "swimming"
+        ]
+      },
+      {
+        "id": "pug-os-cove",
+        "name": "Pug-os Cove",
+        "location": "Cabugao",
+        "summary": "A sheltered cove with calm shallows and cottages, popular for family swimming.",
+        "about": "Pug-os Cove in Cabugao is a gently curving bay with shallow, protected water that makes it ideal for families. Bamboo cottages line the shore and the calm conditions make it one of the more accessible swimming beaches in northern Ilocos Sur.",
+        "tags": [
+          "family",
+          "calm water",
+          "cottages"
+        ]
+      },
+      {
+        "id": "apatot-beach",
+        "name": "Apatot Beach",
+        "location": "San Esteban",
+        "summary": "A pebbled-to-sandy shore prized for clear water and a rugged, quiet atmosphere.",
+        "about": "Apatot Beach in San Esteban is loved for its clean water and laid-back feel. The shoreline mixes fine sand and smooth stones, and the relative remoteness keeps the crowds thin, making it a peaceful spot for swimming and unwinding.",
+        "tags": [
+          "clear water",
+          "quiet",
+          "swimming"
+        ]
+      },
+      {
+        "id": "santiago-cove",
+        "name": "Santiago Cove",
+        "location": "Santiago",
+        "summary": "A scenic crescent bay with resorts, golden sand, and reliable swimming conditions.",
+        "about": "Santiago Cove is one of the province's better-known beach destinations, a crescent of golden sand backed by small resorts. Its protected geography keeps the water swimmable through much of the year, and it is a popular base for coastal getaways.",
+        "tags": [
+          "resort",
+          "golden sand",
+          "getaway"
+        ]
+      }
+    ],
+    "historical": [
+      {
+        "id": "calle-crisologo",
+        "name": "Calle Crisologo",
+        "location": "Vigan City",
+        "summary": "The iconic cobblestone street of Spanish-colonial mansions, a UNESCO World Heritage core.",
+        "about": "Calle Crisologo is the beating heart of Vigan and the image that defines the city: a cobblestone street lined with preserved bahay-na-bato mansions from the Spanish colonial era, their capiz-shell windows and wooden balconies intact. Closed to most traffic, it is best explored on foot or by calesa, especially at dawn or after the lanterns are lit. Vigan is one of the best-preserved Hispanic colonial towns in Asia and a UNESCO World Heritage Site.",
+        "tags": [
+          "UNESCO",
+          "heritage",
+          "iconic"
+        ]
+      },
+      {
+        "id": "syquia-mansion",
+        "name": "Syquia Mansion",
+        "location": "Quirino Boulevard, Vigan",
+        "summary": "The ancestral home of President Elpidio Quirino, preserved as a house museum.",
+        "about": "The Syquia Mansion is a grand 19th-century ancestral house that belonged to the family of President Elpidio Quirino's wife. Now a museum, it preserves period furniture, portraits, and presidential memorabilia, offering a window into the lives of Vigan's wealthy mestizo families.",
+        "tags": [
+          "museum",
+          "presidential",
+          "ancestral home"
+        ]
+      },
+      {
+        "id": "crisologo-museum",
+        "name": "Crisologo Museum",
+        "location": "Liberation Boulevard, Vigan",
+        "summary": "A family museum honoring the political legacy of Congressman Floro Crisologo.",
+        "about": "Housed in the Crisologo ancestral home, this museum chronicles the life and assassination of Congressman Floro Crisologo and the prominent political family. Exhibits include the bullet-marked car, personal effects, and historical documents from Ilocos Sur's mid-20th-century politics.",
+        "tags": [
+          "museum",
+          "history",
+          "free entry"
+        ]
+      },
+      {
+        "id": "plaza-salcedo",
+        "name": "Plaza Salcedo",
+        "location": "Vigan City",
+        "summary": "An oblong plaza named for Juan de Salcedo, home to the dancing fountain show.",
+        "about": "Plaza Salcedo is the older of Vigan's two main plazas, named after Spanish conquistador Juan de Salcedo who founded the city. By day it frames the cathedral and provincial capitol; by night it hosts a free dancing fountain light-and-water show that draws crowds.",
+        "tags": [
+          "plaza",
+          "fountain show",
+          "landmark"
+        ]
+      }
+    ],
+    "church": [
+      {
+        "id": "vigan-cathedral",
+        "name": "St. Paul Metropolitan Cathedral",
+        "location": "Vigan City",
+        "summary": "Vigan's earthquake-baroque cathedral anchoring Plaza Salcedo, with a free-standing bell tower.",
+        "about": "The St. Paul Metropolitan Cathedral is Vigan's principal church, built in the sturdy 'earthquake baroque' style with thick buttressed walls designed to survive seismic activity. Its silver-paneled altar and the separate bell tower nearby make it a centerpiece of the heritage district.",
+        "tags": [
+          "cathedral",
+          "baroque",
+          "landmark"
+        ]
+      },
+      {
+        "id": "santa-maria-church",
+        "name": "Santa Maria Church",
+        "location": "Santa Maria",
+        "summary": "A UNESCO-listed hilltop fortress-church reached by a long flight of stone steps.",
+        "about": "The Church of Our Lady of the Assumption in Santa Maria is a UNESCO World Heritage Site, one of four Baroque Churches of the Philippines. Set atop a hill and reached by an 85-step granite staircase, it was built like a citadel and once served as a fortress, with a detached bell tower standing guard.",
+        "tags": [
+          "UNESCO",
+          "hilltop",
+          "fortress church"
+        ]
+      },
+      {
+        "id": "bantay-bell-tower",
+        "name": "Bantay Bell Tower",
+        "location": "Bantay",
+        "summary": "A hilltop watchtower-belfry beside St. Augustine Church with sweeping town views.",
+        "about": "The Bantay Bell Tower stands on a hill beside the St. Augustine Parish Church, built as both a belfry and a lookout against pirates and invaders. Visitors can climb up for panoramic views of Vigan and the surrounding plains; the tower is also famous as a film location.",
+        "tags": [
+          "bell tower",
+          "viewpoint",
+          "landmark"
+        ]
+      },
+      {
+        "id": "magsingal-church",
+        "name": "Magsingal Church",
+        "location": "Magsingal",
+        "summary": "A historic parish with an adjacent museum of Ilocano ecclesiastical artifacts.",
+        "about": "The St. William the Hermit Parish Church in Magsingal is one of the region's older churches, with ruins of an earlier bell tower nearby. The adjoining museum houses santos, vestments, and colonial-era religious artifacts that document Ilocano Catholic heritage.",
+        "tags": [
+          "parish",
+          "museum",
+          "heritage"
+        ]
+      }
+    ],
+    "arts": [
+      {
+        "id": "pagburnayan",
+        "name": "Pagburnayan Pottery",
+        "location": "Vigan City",
+        "summary": "Working jar factories where artisans throw giant burnay clay vessels on foot-powered wheels.",
+        "about": "Pagburnayan is Vigan's pottery district, where families have made burnay — large earthenware jars — for generations. Using local clay kneaded by a carabao and thrown on a foot-driven potter's wheel, artisans fire the jars in massive ground kilns. The jars are still used to age sugarcane vinegar and bagoong. Visitors can watch the process and even try the wheel.",
+        "tags": [
+          "pottery",
+          "live demo",
+          "craft"
+        ]
+      },
+      {
+        "id": "abel-weaving",
+        "name": "Abel Iloko Weaving",
+        "location": "Vigan & Santiago",
+        "summary": "Handwoven Ilocano textiles produced on wooden pedal looms, prized for durability.",
+        "about": "Abel Iloko (also called inabel) is the traditional handwoven cloth of the Ilocos region, made on large wooden pedal looms. Known for its tight weave, durability, and intricate patterns, abel is fashioned into blankets, table runners, and clothing. Weaving centers welcome visitors to watch weavers at work and buy directly.",
+        "tags": [
+          "weaving",
+          "textile",
+          "craft"
+        ]
+      },
+      {
+        "id": "hidden-garden",
+        "name": "Hidden Garden",
+        "location": "Bulala, Vigan",
+        "summary": "A lush garden-nursery and restaurant showcasing Ilocano plants, crafts, and cuisine.",
+        "about": "Hidden Garden in Barangay Bulala is a sprawling plant nursery turned cultural destination, with landscaped grounds, a souvenir shop of local crafts, and a restaurant (Lilong & Lilang) serving Ilocano specialties amid the greenery. It is a relaxed counterpoint to the heritage streets.",
+        "tags": [
+          "garden",
+          "dining",
+          "souvenirs"
+        ]
+      }
+    ],
+    "festivals": [
+      {
+        "id": "binatbatan-festival",
+        "name": "Viva Vigan Binatbatan Festival",
+        "location": "Vigan City",
+        "summary": "A May festival of the arts centered on abel weaving, with a colorful street-dancing parade.",
+        "about": "The Viva Vigan Binatbatan Festival of the Arts every May celebrates the city's weaving heritage. 'Binatbatan' refers to the bamboo-stick beating of cotton pods to separate seeds. Highlights include a street-dancing competition along Calle Crisologo, a calesa parade, and showcases of local crafts and cuisine.",
+        "tags": [
+          "May",
+          "street dance",
+          "weaving"
+        ]
+      },
+      {
+        "id": "longganisa-festival",
+        "name": "Vigan Longganisa Festival",
+        "location": "Vigan City",
+        "summary": "A January celebration of the city's signature sausage, timed with the town fiesta.",
+        "about": "The Vigan Longganisa Festival every January honors the city's most famous product alongside the feast of the Conversion of St. Paul. Expect a grand street parade, a longganisa-eating and cooking spectacle, food fairs, and cultural performances throughout the heritage district.",
+        "tags": [
+          "January",
+          "food",
+          "fiesta"
+        ]
+      },
+      {
+        "id": "kannawidan-festival",
+        "name": "Kannawidan Ylocos Festival",
+        "location": "Province-wide",
+        "summary": "The province's founding-anniversary festival showcasing Ilocano heritage and tradition.",
+        "about": "Kannawidan Ylocos (from 'kannawidan', meaning tradition) is the province-wide festival marking the founding anniversary of Ilocos Sur, held around February. It gathers the towns for street dancing, trade fairs, beauty pageants, and cultural shows celebrating Ilocano identity.",
+        "tags": [
+          "February",
+          "province-wide",
+          "heritage"
+        ]
+      },
+      {
+        "id": "raniag-festival",
+        "name": "Raniag Twilight Festival",
+        "location": "Vigan City",
+        "summary": "A nighttime festival of lights, lanterns, and glowing art around the heritage village.",
+        "about": "The Raniag Twilight Festival ('raniag' means glow) transforms Vigan after dark with illuminated floats, lanterns, fire dancing, and light installations along the cobblestone streets, usually timed around Halloween. It is a magical evening counterpart to the city's daytime heritage tours.",
+        "tags": [
+          "October",
+          "night",
+          "lights"
+        ]
+      }
+    ],
+    "nature": [
+      {
+        "id": "pinsal-falls",
+        "name": "Pinsal Falls",
+        "location": "Santa Maria",
+        "summary": "A two-tiered waterfall with natural pools, wrapped in local Angalo folklore.",
+        "about": "Pinsal Falls in Santa Maria is the largest waterfall in Ilocos Sur, dropping into refreshing natural swimming pools. Local legend ties the site to the giant Angalo of Ilocano myth. The surrounding rock formations and cool water make it a popular day trip and picnic spot.",
+        "tags": [
+          "waterfall",
+          "swimming",
+          "folklore"
+        ]
+      },
+      {
+        "id": "tirad-pass",
+        "name": "Tirad Pass",
+        "location": "Gregorio del Pilar",
+        "summary": "A historic mountain pass and shrine where Gen. Gregorio del Pilar made his last stand.",
+        "about": "Tirad Pass is a steep mountain trail in the town of Gregorio del Pilar, the site of the 1899 battle where the 24-year-old 'Boy General' del Pilar and his men held off American forces to cover President Aguinaldo's retreat. A shrine marks the spot; reaching it is a rewarding hike through rugged terrain rich in history.",
+        "tags": [
+          "hiking",
+          "history",
+          "shrine"
+        ]
+      },
+      {
+        "id": "quirino-bridge",
+        "name": "Quirino (Banaoang) Bridge",
+        "location": "Santa / Bantay",
+        "summary": "A landmark steel-arch bridge over the Abra River with a popular hilltop viewpoint.",
+        "about": "The Quirino Bridge spans the Abra River at the Banaoang Gap. The newer arch bridge stands beside the remnants of the old one, and a nearby viewdeck offers a sweeping panorama of the river carving through the mountains — a favorite photo stop for travelers entering or leaving Vigan.",
+        "tags": [
+          "viewpoint",
+          "river",
+          "landmark"
+        ]
+      },
+      {
+        "id": "banaoang-viewdeck",
+        "name": "Banaoang Viewdeck",
+        "location": "Bantay",
+        "summary": "A roadside overlook framing the Abra River, mountains, and the Quirino Bridge.",
+        "about": "The Banaoang Viewdeck is a hilltop lookout near the Quirino Bridge offering one of the most photographed vistas in the province: the wide Abra River, the Banaoang Gap, and distant ranges. It is an easy stop for travelers and a fine spot to catch the breeze.",
+        "tags": [
+          "viewpoint",
+          "photo stop",
+          "scenic"
+        ]
+      }
+    ],
+    "pasalubong": [
+      {
+        "id": "sukang-iloko",
+        "name": "Sukang Iloko",
+        "location": "Vigan markets",
+        "summary": "Naturally fermented sugarcane vinegar aged in burnay jars, an Ilocano kitchen staple.",
+        "about": "Sukang Iloko is the dark, mellow sugarcane vinegar that defines Ilocano cooking, traditionally fermented and aged inside burnay clay jars. Bottled and sold throughout Vigan, it is the essential dip for empanada and bagnet and a popular pasalubong to take home.",
+        "tags": [
+          "vinegar",
+          "pantry",
+          "pasalubong"
+        ]
+      },
+      {
+        "id": "abel-products",
+        "name": "Abel Woven Goods",
+        "location": "Vigan & Santiago",
+        "summary": "Handwoven blankets, runners, and bags in traditional Ilocano patterns.",
+        "about": "Finished abel Iloko products — binakol blankets with their hypnotic whirlwind patterns, table runners, scarves, and bags — make durable, meaningful souvenirs. Buying directly from weaving centers supports the artisans who keep the tradition alive.",
+        "tags": [
+          "textile",
+          "handwoven",
+          "souvenir"
+        ]
+      },
+      {
+        "id": "burnay-jars",
+        "name": "Burnay Jars",
+        "location": "Pagburnayan, Vigan",
+        "summary": "Hand-thrown earthenware jars, from tiny keepsakes to large vinegar vessels.",
+        "about": "Miniature burnay jars make charming, lightweight souvenirs straight from the Pagburnayan kilns, while full-size jars are still bought by locals for fermenting vinegar and bagoong. Each is shaped by hand and fired in traditional ground kilns.",
+        "tags": [
+          "pottery",
+          "keepsake",
+          "souvenir"
+        ]
+      },
+      {
+        "id": "chichacorn",
+        "name": "Chichacorn",
+        "location": "Vigan pasalubong shops",
+        "summary": "Crunchy deep-fried corn kernels in garlic, sweet, and spicy flavors.",
+        "about": "Chichacorn is the addictive Ilocano snack of fried glutinous corn kernels, seasoned in flavors from plain salted to garlic, barbecue, and spicy. Sold in resealable bags at every pasalubong center, it travels well and is a guaranteed crowd-pleaser back home.",
+        "tags": [
+          "snack",
+          "crunchy",
+          "pasalubong"
+        ]
+      }
+    ],
+    "stay": [
+      {
+        "id": "hotel-luna",
+        "name": "Hotel Luna",
+        "location": "Calle Crisologo, Vigan",
+        "summary": "A heritage boutique art hotel inside a restored mansion, with an on-site gallery.",
+        "about": "Hotel Luna is a luxury boutique hotel set in a restored colonial mansion on the corner of Calle Crisologo. Named for painter Juan Luna, it doubles as an art museum, displaying works by Filipino masters throughout its halls. It pairs heritage architecture with modern comforts and a rooftop pool.",
+        "tags": [
+          "boutique",
+          "heritage",
+          "art hotel"
+        ]
+      },
+      {
+        "id": "ciudad-fernandina",
+        "name": "Ciudad Fernandina Hotel",
+        "location": "Vigan City",
+        "summary": "A mid-range heritage-style hotel a short walk from the cobblestone core.",
+        "about": "Ciudad Fernandina Hotel offers comfortable, well-located rooms styled to echo Vigan's colonial character, within easy walking distance of Calle Crisologo and the plazas. It is a popular choice for travelers wanting heritage ambiance without a luxury price tag.",
+        "tags": [
+          "mid-range",
+          "central",
+          "heritage style"
+        ]
+      },
+      {
+        "id": "grandpas-inn",
+        "name": "Grandpa's Inn",
+        "location": "Bonifacio St., Vigan",
+        "summary": "A characterful budget-friendly inn in an antique house, home to the Calesa Restaurant.",
+        "about": "Grandpa's Inn is a beloved heritage inn filled with antiques, four-poster beds, and old-world charm at friendly rates. Its Calesa Restaurant — built around an actual horse carriage — serves Ilocano favorites and is a destination in itself.",
+        "tags": [
+          "budget",
+          "antique",
+          "dining"
+        ]
+      },
+      {
+        "id": "vigan-plaza-hotel",
+        "name": "Vigan Plaza Hotel",
+        "location": "Plaza Burgos, Vigan",
+        "summary": "A comfortable hotel steps from Plaza Burgos and the empanada stalls.",
+        "about": "Vigan Plaza Hotel sits right on Plaza Burgos, placing guests beside the famous empanada stalls and a short stroll from the cathedral and Calle Crisologo. It offers reliable mid-range rooms and an unbeatable central location for exploring on foot.",
+        "tags": [
+          "central",
+          "mid-range",
+          "plaza view"
+        ]
+      }
+    ],
+    "transportation": [
+      {
+        "id": "calesa",
+        "name": "Calesa (Horse Carriage)",
+        "location": "Vigan City",
+        "summary": "The traditional horse-drawn carriage, the classic way to tour the heritage streets.",
+        "about": "The calesa is a horse-drawn carriage and the most atmospheric way to see Vigan. Cocheros (drivers) offer city tours that loop past the cathedral, plazas, Pagburnayan, and the major museums. Negotiate the route and fare before boarding; it is an experience as much as a ride.",
+        "tags": [
+          "heritage",
+          "city tour",
+          "iconic"
+        ]
+      },
+      {
+        "id": "tricycle",
+        "name": "Tricycle",
+        "location": "Province-wide",
+        "summary": "Motorcycle-and-sidecar taxis for short hops around towns and to nearby beaches.",
+        "about": "Tricycles are the everyday workhorse of local transport: a motorcycle fitted with a passenger sidecar. They are ideal for short trips within Vigan and to nearby barangays and beaches. Fares are cheap; confirm the price first, especially for special (non-shared) trips.",
+        "tags": [
+          "local",
+          "short trips",
+          "affordable"
+        ]
+      },
+      {
+        "id": "jeepney",
+        "name": "Jeepney",
+        "location": "Province-wide",
+        "summary": "Shared route-based jeeps connecting Vigan with surrounding towns.",
+        "about": "Jeepneys run fixed routes between Vigan and the neighboring towns of Ilocos Sur, making them the cheapest way to cover longer distances within the province. Routes and destinations are painted on the side; you pay by passing your fare up to the driver.",
+        "tags": [
+          "shared",
+          "intertown",
+          "budget"
+        ]
+      },
+      {
+        "id": "bus-van-terminal",
+        "name": "Bus & Van Terminals",
+        "location": "Vigan City",
+        "summary": "Long-haul buses and express vans linking Vigan to Manila, Laoag, and the north.",
+        "about": "Vigan is served by several bus lines (such as Partas and Viron) running to Manila, as well as express UV vans to Laoag, San Fernando, and other northern hubs. Terminals cluster near the city center; overnight buses are the common way to arrive from Metro Manila.",
+        "tags": [
+          "long haul",
+          "intercity",
+          "terminal"
+        ]
+      }
+    ]
+  }
+};
+
+  /* ----- tiny helpers ---------------------------------------------------- */
+  function $(s, r){ return (r||document).querySelector(s); }
+  function esc(s){
+    return String(s==null?"":s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+  function b64(str){ return btoa(unescape(encodeURIComponent(str))); }
+  function delay(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function uuid(){
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c){
+      var r = Math.random()*16|0, v = c==="x"?r:(r&0x3|0x8); return v.toString(16);
+    });
+  }
+
+  /* ----- placeholder image generator (was the Flask /placeholder route) -- */
+  function placeholderURI(text, w, h){
+    w = w||640; h = h||420;
+    var fs = Math.max(14, Math.floor(Math.min(w,h)/9));
+    var t = esc(text);
+    var svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'
+      + '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+      + '<stop offset="0" stop-color="#e9dcc6"/><stop offset="1" stop-color="#d8c3a3"/></linearGradient></defs>'
+      + '<rect width="100%" height="100%" fill="url(#g)"/>'
+      + '<rect x="6" y="6" width="'+(w-12)+'" height="'+(h-12)+'" fill="none" stroke="#b9986a" stroke-width="2" stroke-dasharray="9 7"/>'
+      + '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="'+fs+'" fill="#7a5a35">'+t+'</text>'
+      + '<text x="50%" y="'+(h-18)+'" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#9a7a52">image placeholder</text>'
+      + '</svg>';
+    return "data:image/svg+xml;base64," + b64(svg);
+  }
+
+  // Build an <img> for an item: use its real image if set (falling back to a
+  // generated placeholder if that file is missing), else the placeholder.
+  function imgTag(item, w, h, cls){
+    var ph = placeholderURI(item.name, w, h);
+    var src = item.image ? item.image : ph;
+    return '<img class="'+cls+'" src="'+esc(src)+'" alt="'+esc(item.name)+'" loading="lazy" '
+         + 'onerror="this.onerror=null;this.src=\''+ph+'\'">';
+  }
+
+  /* ----- in-memory store (was the database) ------------------------------ */
+  // Records live only for this browser session; reloading clears them.
+  var store = { regs: {} };
+
+  /* ----- async "API" (was the Flask JSON endpoints) ---------------------- */
+  // Small delays make the asynchronous (AJAX-style) loading states visible.
+  var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+  function isValidCategory(slug){
+    return DATA.categories.some(function(c){ return c.slug === slug; });
+  }
+  function getCategory(slug){
+    return DATA.categories.filter(function(c){ return c.slug === slug; })[0] || null;
+  }
+
+  var api = {
+    getCategories: function(){
+      return delay(40).then(function(){ return DATA.categories.slice(); });
+    },
+    getAttractions: function(slug){
+      return delay(140).then(function(){
+        if (!isValidCategory(slug)) { var e = new Error("Unknown category"); e.status = 404; throw e; }
+        return { category: getCategory(slug), items: (DATA.items[slug] || []).slice() };
+      });
+    },
+    getItem: function(slug, id){
+      return delay(90).then(function(){
+        var item = (DATA.items[slug] || []).filter(function(i){ return i.id === id; })[0];
+        if (!item) { var e = new Error("Item not found"); e.status = 404; throw e; }
+        return item;
+      });
+    },
+    register: function(payload){
+      return delay(160).then(function(){
+        var res = validateRegistration(payload);
+        if (Object.keys(res.errors).length){
+          var e = new Error("validation"); e.errors = res.errors; throw e;
+        }
+        var rec = res.cleaned;
+        rec.id = uuid();
+        rec.created_at = new Date().toISOString();
+        store.regs[rec.id] = rec;          // "persist" in memory
+        return rec;
+      });
+    },
+    getRegistration: function(id){
+      return delay(120).then(function(){
+        var rec = store.regs[id];
+        if (!rec) { var e = new Error("Registration not found"); e.status = 404; throw e; }
+        return rec;
+      });
+    }
+  };
+
+  /* ----- validation (ported from the Flask backend) ---------------------- */
+  function validateRegistration(p){
+    p = p || {};
+    var errors = {}, cleaned = {};
+
+    var fullName = String(p.full_name||"").trim();
+    if (fullName.length < 2) errors.full_name = "Please enter your full name.";
+    cleaned.full_name = fullName;
+
+    var email = String(p.email||"").trim();
+    if (!EMAIL_RE.test(email)) errors.email = "Please enter a valid email address.";
+    cleaned.email = email;
+
+    cleaned.phone = String(p.phone||"").trim();
+
+    var category = String(p.category||"").trim();
+    if (category && !isValidCategory(category)) errors.category = "Please choose a valid category.";
+    cleaned.category = category;
+
+    cleaned.attraction = String(p.attraction||"").trim();
+
+    var visit = String(p.visit_date||"").trim();
+    if (visit){
+      var ok = /^\d{4}-\d{2}-\d{2}$/.test(visit) && !isNaN(new Date(visit).getTime());
+      if (!ok) errors.visit_date = "Please use a valid date.";
+    }
+    cleaned.visit_date = visit;
+
+    var travelers = parseInt(p.travelers, 10);
+    if (isNaN(travelers) || travelers < 1 || travelers > 100){
+      errors.travelers = "Travelers must be a number between 1 and 100.";
+      travelers = null;
+    }
+    cleaned.travelers = travelers;
+
+    cleaned.notes = String(p.notes||"").trim();
+    return { cleaned: cleaned, errors: errors };
+  }
+
+  /* =======================================================================
+     VIEWS  — each returns an HTML string rendered into #app
+     ======================================================================= */
+  function viewHome(){
+    var heroImg = '<iframe class="hero-img" title="Map of Ilocos Sur" '
+      + 'src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d833108.4924802962!2d120.79121885836076!3d17.28736784934246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x338e3e395bcef0b5%3A0xf338d7611b98ada3!2sIlocos%20Sur!5e0!3m2!1sen!2sph!4v1781369097833!5m2!1sen!2sph" '
+      + 'style="border:0;width:100%;height:460px;border-radius:12px;display:block" '
+      + 'allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+
+    var explore = DATA.categories.map(function(c){
+      return ''
+        + '<a class="explore-card" href="#/'+c.slug+'">'
+        +   '<img class="explore-thumb" alt="'+esc(c.title)+'" src="'+placeholderURI(c.title, 420, 280)+'">'
+        +   '<div class="explore-body">'
+        +     '<h3 class="explore-name">'+esc(c.title)+'</h3>'
+        +     '<p class="explore-tag">'+esc(c.tagline)+'</p>'
+        +   '</div>'
+        + '</a>';
+    }).join("");
+
+    return ''
+    + '<section class="hero"><div class="container hero-inner">'
+    +   '<p class="hero-eyebrow">Welcome to the Province of</p>'
+    +   '<h1 class="hero-title">Ilocos Sur</h1>'
+    +   '<p class="hero-sub">Heritage cobblestones, baroque churches, and the flavors of the North</p>'
+    +   '<figure class="hero-frame">'+heroImg+'</figure>'
+    + '</div></section>'
+
+    + '<section class="history" id="history"><div class="container">'
+    +   '<h2 class="section-title">History</h2>'
+    +   '<div class="history-card">'
+    +     '<p>Ilocos Sur sits on the northwestern coast of Luzon, facing the West Philippine Sea. '
+    +     'Long before Spanish contact, its coastal settlements traded with merchants from China and beyond. '
+    +     'In 1572 the conquistador Juan de Salcedo reached the Bigan river delta and founded the town that '
+    +     'would become <strong>Vigan</strong>, laying out the grid of streets and plazas that still defines the city today.</p>'
+    +     '<p>Through the Spanish colonial centuries, Vigan grew into a prosperous trading hub where Chinese, '
+    +     'Spanish, and Ilocano cultures fused into a distinctive mestizo society. That heritage is written into the '
+    +     '<em>bahay-na-bato</em> mansions of Calle Crisologo, the earthquake-baroque churches of Santa Maria and Bantay, '
+    +     'and the burnay jars still thrown by hand in the city\'s pottery kilns.</p>'
+    +     '<p>The province also carries the weight of the nation\'s history — from the last stand of the young '
+    +     'General Gregorio del Pilar at Tirad Pass in 1899, to its role as the home province of President Elpidio Quirino. '
+    +     'Today Vigan is recognized as a UNESCO World Heritage Site, one of the best-preserved Hispanic colonial towns in Asia, '
+    +     'and the gateway to a province rich in food, faith, craft, and coastline.</p>'
+    +   '</div>'
+    + '</div></section>'
+
+    + '<section class="explore"><div class="container">'
+    +   '<h2 class="section-title">Explore by category</h2>'
+    +   '<p class="section-lead">Tap the three lines at the top-left any time to open the full menu, or jump straight in below.</p>'
+    +   '<div class="explore-grid">'+explore+'</div>'
+    + '</div></section>';
+  }
+
+  function viewCategory(slug){
+    var c = getCategory(slug);
+    return ''
+    + '<section class="category" data-category="'+esc(slug)+'"><div class="container">'
+    +   '<header class="category-head">'
+    +     '<h1 class="display-title">'+esc(c.title)+'</h1>'
+    +     '<p class="category-tag">'+esc(c.tagline)+'</p>'
+    +   '</header>'
+    +   '<div id="cardsStatus" class="cards-status" role="status">'
+    +     '<div class="spinner-border" aria-hidden="true"></div>'
+    +     '<span>Loading '+esc(c.title.toLowerCase())+'…</span>'
+    +   '</div>'
+    +   '<div id="cardGrid" class="card-grid" aria-live="polite"></div>'
+    + '</div></section>';
+  }
+
+  function viewRegister(prefill){
+    prefill = prefill || {};
+    var options = '<option value="">— Choose a category —</option>' + DATA.categories.map(function(c){
+      var sel = (prefill.category === c.slug) ? ' selected' : '';
+      return '<option value="'+esc(c.slug)+'"'+sel+'>'+esc(c.title)+'</option>';
+    }).join("");
+    var attr = prefill.attraction ? esc(prefill.attraction) : "";
+
+    return ''
+    + '<section class="register"><div class="container register-inner">'
+    +   '<header class="register-head">'
+    +     '<h1 class="display-title">Book a Visit</h1>'
+    +     '<p class="register-tag">Tell us about your trip and we\'ll set up your traveler profile.</p>'
+    +   '</header>'
+    +   '<form id="registerForm" class="register-form" novalidate>'
+    +     '<div class="row g-3">'
+    +       '<div class="col-md-6"><label class="form-label" for="full_name">Full name</label>'
+    +         '<input class="form-control" id="full_name" name="full_name" type="text" autocomplete="name" required>'
+    +         '<div class="field-error" data-error-for="full_name"></div></div>'
+    +       '<div class="col-md-6"><label class="form-label" for="email">Email</label>'
+    +         '<input class="form-control" id="email" name="email" type="email" autocomplete="email" required>'
+    +         '<div class="field-error" data-error-for="email"></div></div>'
+    +       '<div class="col-md-6"><label class="form-label" for="phone">Phone <span class="opt">(optional)</span></label>'
+    +         '<input class="form-control" id="phone" name="phone" type="tel" autocomplete="tel">'
+    +         '<div class="field-error" data-error-for="phone"></div></div>'
+    +       '<div class="col-md-6"><label class="form-label" for="travelers">Number of travelers</label>'
+    +         '<input class="form-control" id="travelers" name="travelers" type="number" min="1" max="100" value="1" required>'
+    +         '<div class="field-error" data-error-for="travelers"></div></div>'
+    +       '<div class="col-md-6"><label class="form-label" for="category">Interested in</label>'
+    +         '<select class="form-select" id="category" name="category">'+options+'</select>'
+    +         '<div class="field-error" data-error-for="category"></div></div>'
+    +       '<div class="col-md-6"><label class="form-label" for="visit_date">Planned visit date <span class="opt">(optional)</span></label>'
+    +         '<input class="form-control" id="visit_date" name="visit_date" type="date">'
+    +         '<div class="field-error" data-error-for="visit_date"></div></div>'
+    +       '<div class="col-12"><label class="form-label" for="attraction">Specific attraction or tour <span class="opt">(optional)</span></label>'
+    +         '<input class="form-control" id="attraction" name="attraction" type="text" value="'+attr+'" placeholder="e.g. Calle Crisologo calesa tour">'
+    +         '<div class="field-error" data-error-for="attraction"></div></div>'
+    +       '<div class="col-12"><label class="form-label" for="notes">Notes <span class="opt">(optional)</span></label>'
+    +         '<textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Tell us anything that helps us plan your visit."></textarea>'
+    +         '<div class="field-error" data-error-for="notes"></div></div>'
+    +     '</div>'
+    +     '<div class="form-banner" id="formBanner" role="alert" hidden></div>'
+    +     '<div class="register-actions">'
+    +       '<button class="btn btn-clay btn-lg" type="submit" id="submitBtn">'
+    +         '<span class="btn-label">Submit registration</span>'
+    +         '<span class="spinner-border spinner-border-sm btn-spinner" hidden aria-hidden="true"></span>'
+    +       '</button>'
+    +     '</div>'
+    +   '</form>'
+    + '</div></section>';
+  }
+
+  function viewConfirmation(id){
+    var rows = [
+      ["Reference","p_id"],["Full name","p_name"],["Email","p_email"],["Phone","p_phone"],
+      ["Interest","p_category"],["Attraction / tour","p_attraction"],["Visit date","p_visit_date"],
+      ["Travelers","p_travelers"],["Notes","p_notes"],["Registered on","p_created"]
+    ].map(function(r){
+      return '<div class="profile-row"><span class="profile-key">'+r[0]+'</span>'
+           + '<span class="profile-val" id="'+r[1]+'"></span></div>';
+    }).join("");
+
+    return ''
+    + '<section class="confirm" data-registration-id="'+esc(id)+'"><div class="container confirm-inner">'
+    +   '<div id="confirmStatus" class="cards-status" role="status">'
+    +     '<div class="spinner-border" aria-hidden="true"></div><span>Fetching your registration…</span>'
+    +   '</div>'
+    +   '<div id="confirmContent" hidden>'
+    +     '<div class="confirm-badge">✓ Registered</div>'
+    +     '<h1 class="display-title">You\'re all set</h1>'
+    +     '<p class="confirm-tag">Your traveler profile has been created and saved. Here\'s a summary of what we have on file.</p>'
+    +     '<div class="profile-card">'+rows+'</div>'
+    +     '<div class="confirm-actions">'
+    +       '<a class="btn btn-clay" href="#/">Back to home</a>'
+    +       '<a class="btn btn-outline-clay" href="#/register">Register another</a>'
+    +     '</div>'
+    +   '</div>'
+    +   '<div id="confirmError" class="form-banner" role="alert" hidden></div>'
+    + '</div></section>';
+  }
+
+  function view404(){
+    return ''
+    + '<section class="notfound"><div class="container text-center">'
+    +   '<h1 class="display-title">404</h1>'
+    +   '<p class="notfound-lead">That page wandered off the cobblestones. Let\'s get you back on the route.</p>'
+    +   '<a class="btn btn-clay btn-lg" href="#/">Return home</a>'
+    + '</div></section>';
+  }
+
+  /* =======================================================================
+     AJAX-STYLE HANDLERS — call the async api + manipulate the DOM
+     ======================================================================= */
+  // Category page: load the card grid asynchronously.
+  function loadCategoryCards(slug){
+    var grid = $("#cardGrid"), statusEl = $("#cardsStatus");
+    api.getAttractions(slug).then(function(data){
+      statusEl.hidden = true;
+      grid.innerHTML = "";
+      if (!data.items.length){
+        grid.innerHTML = '<p class="text-muted">Listings are coming soon.</p>';
+        return;
+      }
+      grid.innerHTML = data.items.map(function(item){
+        return ''
+        + '<article class="attraction-card">'
+        +   '<div class="attraction-media">'+imgTag(item, 640, 420, "")+'</div>'
+        +   '<h3 class="attraction-name">'+esc(item.name)+'</h3>'
+        +   '<p class="attraction-summary">'+esc(item.summary||"")+'</p>'
+        +   '<button class="see-info" type="button" data-id="'+esc(item.id)+'">See Info</button>'
+        + '</article>';
+      }).join("");
+
+      Array.prototype.forEach.call(grid.querySelectorAll(".see-info"), function(btn){
+        btn.addEventListener("click", function(){ openInfo(slug, btn.getAttribute("data-id")); });
+      });
+    }).catch(function(err){
+      statusEl.hidden = false;
+      statusEl.innerHTML = '<span>Couldn\'t load this category. ' + esc(err.message) + '</span>';
+    });
+  }
+
+  var infoModalInstance = null;
+  function getInfoModal(){
+    var node = $("#infoModal");
+    if (!infoModalInstance && window.bootstrap){
+      infoModalInstance = new bootstrap.Modal(node);
+      node.addEventListener("show.bs.modal", function(){ document.body.classList.add("info-modal-active"); });
+      node.addEventListener("hidden.bs.modal", function(){ document.body.classList.remove("info-modal-active"); });
+    }
+    return infoModalInstance;
+  }
+
+  // "See Info": fetch one item, fill the modal, open it (background blurs).
+  function openInfo(slug, id){
+    api.getItem(slug, id).then(function(item){
+      $("#infoImage").src = item.image ? item.image : placeholderURI(item.name, 640, 420);
+      $("#infoImage").alt = item.name;
+      $("#infoImage").onerror = function(){ this.onerror=null; this.src = placeholderURI(item.name, 640, 420); };
+      $("#infoModalLabel").textContent = item.name;
+      $("#infoLocation").textContent = item.location || "";
+      $("#infoAbout").textContent = item.about || item.summary || "";
+
+      var tags = $("#infoTags"); tags.innerHTML = "";
+      (item.tags||[]).forEach(function(t){
+        var chip = document.createElement("span");
+        chip.className = "info-chip"; chip.textContent = t; tags.appendChild(chip);
+      });
+
+      $("#infoBook").setAttribute("href",
+        "#/register?category=" + encodeURIComponent(slug) + "&attraction=" + encodeURIComponent(item.name));
+
+      var m = getInfoModal();
+      if (m) m.show();
+    }).catch(function(err){
+      alert("Sorry, we couldn't open that item. " + err.message);
+    });
+  }
+
+  // Registration form: async submit, then route to the confirmation page.
+  function wireRegister(){
+    var form = $("#registerForm");
+    if (!form) return;
+    var submitBtn = $("#submitBtn"), spinner = $(".btn-spinner", submitBtn), banner = $("#formBanner");
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();                 // no page reload
+      clearErrors();
+      setLoading(true);
+
+      var payload = {
+        full_name: val("full_name"), email: val("email"), phone: val("phone"),
+        category: val("category"), attraction: val("attraction"),
+        visit_date: val("visit_date"), travelers: val("travelers"), notes: val("notes")
+      };
+
+      api.register(payload).then(function(reg){
+        // success -> go to confirmation, which fetches + reflects the record
+        location.hash = "#/confirmation/" + reg.id;
+      }).catch(function(err){
+        if (err && err.errors) showErrors(err.errors);
+        else showBanner("Something went wrong. Please try again.");
+        setLoading(false);
+      });
+    });
+
+    function setLoading(on){ submitBtn.disabled = on; if (spinner) spinner.hidden = !on; }
+    function clearErrors(){
+      banner.hidden = true; banner.textContent = "";
+      Array.prototype.forEach.call(document.querySelectorAll(".field-error"), function(n){ n.textContent = ""; });
+      Array.prototype.forEach.call(document.querySelectorAll(".is-invalid-field"), function(n){ n.classList.remove("is-invalid-field"); });
+    }
+    function showErrors(errs){
+      Object.keys(errs).forEach(function(field){
+        if (field === "_server"){ showBanner(errs[field]); return; }
+        var slot = document.querySelector('.field-error[data-error-for="'+field+'"]');
+        if (slot) slot.textContent = errs[field];
+        var input = document.getElementById(field);
+        if (input) input.classList.add("is-invalid-field");
+      });
+    }
+    function showBanner(msg){ banner.hidden = false; banner.textContent = msg; }
+    function val(id){ var n = document.getElementById(id); return n ? n.value.trim() : ""; }
+  }
+
+  // Confirmation page: fetch the stored record and reflect it on screen.
+  function loadRegistration(id){
+    var statusEl = $("#confirmStatus"), content = $("#confirmContent"), errorEl = $("#confirmError");
+    api.getRegistration(id).then(function(reg){
+      var dash = "—";
+      var cat = String(reg.category || "");
+      var prettyCat = cat ? cat.charAt(0).toUpperCase() + cat.slice(1) : dash;
+      setText("p_id", reg.id || dash);
+      setText("p_name", reg.full_name || dash);
+      setText("p_email", reg.email || dash);
+      setText("p_phone", reg.phone || dash);
+      setText("p_category", prettyCat);
+      setText("p_attraction", reg.attraction || dash);
+      setText("p_visit_date", reg.visit_date || dash);
+      setText("p_travelers", reg.travelers != null ? String(reg.travelers) : dash);
+      setText("p_notes", reg.notes || dash);
+      setText("p_created", formatDate(reg.created_at));
+      statusEl.hidden = true; content.hidden = false;
+    }).catch(function(err){
+      statusEl.hidden = true; errorEl.hidden = false;
+      errorEl.textContent = (err.status === 404)
+        ? "We couldn't find that registration. It may have expired or the link is incorrect."
+        : "Could not load your registration: " + err.message;
+    });
+
+    function setText(id, t){ var n = document.getElementById(id); if (n) n.textContent = t; }
+    function formatDate(iso){
+      if (!iso) return "—";
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return iso;
+      return d.toLocaleString(undefined, { year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
+    }
+  }
+
+  /* =======================================================================
+     CATEGORIES MENU + ROUTER
+     ======================================================================= */
+  function buildCategoryNav(){
+    var nav = $("#catNav");
+    var html = '<a class="cat-link" data-route="home" href="#/">Home</a>';
+    html += DATA.categories.map(function(c){
+      return '<a class="cat-link" data-route="category" data-slug="'+esc(c.slug)+'" href="#/'+c.slug+'">'
+           +   '<span class="cat-link-title">'+esc(c.title)+'</span>'
+           +   '<span class="cat-link-tag">'+esc(c.tagline)+'</span>'
+           + '</a>';
+    }).join("");
+    html += '<a class="cat-link cat-link--cta" data-route="register" href="#/register">'
+          +   '<span class="cat-link-title">Book a Visit / Register</span>'
+          +   '<span class="cat-link-tag">Plan your Ilocos Sur trip</span>'
+          + '</a>';
+    nav.innerHTML = html;
+  }
+
+  function setActiveNav(route, slug){
+    Array.prototype.forEach.call(document.querySelectorAll("#catNav .cat-link"), function(a){
+      var match = a.getAttribute("data-route") === route
+        && (route !== "category" || a.getAttribute("data-slug") === slug);
+      a.classList.toggle("is-active", !!match);
+    });
+  }
+
+  function closeOverlays(){
+    if (!window.bootstrap) return;
+    var oc = $("#categoriesMenu"); var oi = bootstrap.Offcanvas.getInstance(oc);
+    if (oi) oi.hide();
+    var m = bootstrap.Modal.getInstance($("#infoModal"));
+    if (m) m.hide();
+  }
+
+  function parseHash(){
+    var h = (location.hash || "").replace(/^#/, "");
+    if (!h || h === "/") return { name: "home" };
+    var parts = h.split("?");
+    var path = parts[0], qs = parts[1] || "";
+    var query = {};
+    if (qs) qs.split("&").forEach(function(pair){
+      var kv = pair.split("="); query[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || "");
+    });
+    var segs = path.split("/").filter(Boolean);
+    if (!segs.length) return { name: "home" };
+    if (segs[0] === "register") return { name: "register", query: query };
+    if (segs[0] === "confirmation") return { name: "confirmation", id: segs[1], query: query };
+    return { name: "category", slug: segs[0], query: query };
+  }
+
+  function render(){
+    var app = $("#app");
+    var r = parseHash();
+    closeOverlays();
+
+    if (r.name === "home"){
+      app.innerHTML = viewHome();
+    } else if (r.name === "register"){
+      app.innerHTML = viewRegister(r.query || {});
+      wireRegister();
+    } else if (r.name === "confirmation"){
+      app.innerHTML = viewConfirmation(r.id);
+      loadRegistration(r.id);
+    } else if (r.name === "category" && isValidCategory(r.slug)){
+      app.innerHTML = viewCategory(r.slug);
+      loadCategoryCards(r.slug);
+    } else {
+      app.innerHTML = view404();
+    }
+
+    setActiveNav(r.name, r.slug);
+    window.scrollTo(0, 0);
+  }
+
+  /* ----- boot ------------------------------------------------------------ */
+  window.addEventListener("hashchange", render);
+  document.addEventListener("DOMContentLoaded", function(){
+    buildCategoryNav();
+    render();
+  });
+})();
+  </script>
+</body>
+</html>
