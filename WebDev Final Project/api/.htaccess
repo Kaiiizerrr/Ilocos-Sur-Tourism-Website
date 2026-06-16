@@ -1,0 +1,7 @@
+# Block direct browser access to the include-only PHP files in this folder.
+# Only api/index.php (the front controller) should be web-reachable; it is
+# reached through the project-root rewrite rule. The files below are libraries
+# meant to be included, never requested directly.
+<FilesMatch "^(config|db|validation|helpers)\.php$">
+    Require all denied
+</FilesMatch>

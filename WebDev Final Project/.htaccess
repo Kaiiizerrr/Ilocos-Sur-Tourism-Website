@@ -1,0 +1,34 @@
+# =============================================================================
+# .htaccess — Apache routing for the Ilocos Sur Tourism Portal on XAMPP
+# =============================================================================
+# XAMPP ships with mod_rewrite enabled and AllowOverride All for htdocs, so this
+# file works out of the box. It does two things:
+#   1. Routes every "api/..." request to the PHP API front controller
+#      (api/index.php), which keeps the frontend's clean "/api/..." AJAX URLs.
+#   2. Falls back to index.php for any non-existent path, so a refresh on a deep
+#      hash-route still loads the single-page app (matches the original Flask
+#      behaviour, whose 404 handler also served the app shell).
+# Real files (the HTML, images) are served normally.
+
+# Use index.php as the directory default (serves the single-page frontend).
+DirectoryIndex index.php index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1) API: send anything under api/ to the front controller. REQUEST_URI is
+    #    preserved, so the controller still sees the full path and HTTP method.
+    #    END stops rewriting cleanly (no re-loop) on Apache 2.4 (XAMPP).
+    RewriteRule ^api(/.*)?$ api/index.php [QSA,END]
+
+    # 2) Serve real files and directories as-is.
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [END]
+
+    # 3) Everything else renders the app shell (hash router resolves the view).
+    RewriteRule ^ index.php [END]
+</IfModule>
+
+# Never list directory contents.
+Options -Indexes
