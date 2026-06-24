@@ -791,7 +791,7 @@ body{
 };
 
   var DEVELOPERS = {
-    group: "2",   /* ← replace X with your actual group number */
+    group: "2",  
     members: [
       { name: "Erika Joy Fernandez", role: "Developer", image: "app-images/dev1.png" },
       { name: "Railley Nieles", role: "Developer", image: "app-images/dev2.jpg" },
@@ -822,7 +822,7 @@ body{
     });
   }
 
-  /* ----- placeholder image generator (was the Flask /placeholder route) -- */
+  /* ----- placeholder image generator ---- */
   function placeholderURI(text, w, h){
     w = w||640; h = h||420;
     var fs = Math.max(14, Math.floor(Math.min(w,h)/9));
@@ -852,7 +852,7 @@ body{
   // Records live only for this browser session; reloading clears them.
   var store = { regs: {} };
 
-  /* ----- async "API" (was the Flask JSON endpoints) ---------------------- */
+  /* ----- async "API"  ---------------------- */
   // Small delays make the asynchronous (AJAX-style) loading states visible.
   var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
