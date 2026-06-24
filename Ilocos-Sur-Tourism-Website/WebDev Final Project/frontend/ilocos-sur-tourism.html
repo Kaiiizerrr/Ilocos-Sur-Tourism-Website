@@ -1,0 +1,2051 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ilocos Sur Province</title>
+
+  <!-- Incorporates the Bootstrap framework for UI designing -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet" crossorigin="anonymous">
+
+  <!-- Heritage display and body typefaces -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+
+  <style>
+:root {
+  /* Palette */
+  --clay:        #b34a2a;
+  --clay-deep:   #8f3a20;
+  --clay-soft:   #d9836a;
+  --char:        #2a2521;
+  --char-soft:   #4a423b;
+  --cream:       #f6f0e4;
+  --cream-2:     #efe6d4;
+  --paper:       #fffdf8;
+  --teal:        #1f6f66;
+  --gold:        #c89535;
+  --line:        #e3d6bf;
+
+  /* Type */
+  --font-display: "Archivo", "Segoe UI", system-ui, sans-serif;
+  --font-body:    "Inter", "Segoe UI", system-ui, sans-serif;
+
+  /* Bootstrap overrides */
+  --bs-body-font-family: var(--font-body);
+  --bs-body-color: var(--char);
+  --bs-body-bg: var(--cream);
+}
+
+* { -webkit-font-smoothing: antialiased; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--char);
+  background: var(--cream);
+  padding-top: 60px;
+  display: flex;
+  flex-direction: column;
+}
+
+.container { max-width: 1120px; }
+.display-title,
+.hero-title,
+.section-title,
+.cat-title,
+.info-name {
+  font-family: var(--font-display);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  color: var(--char);
+}
+
+.display-title {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  text-transform: uppercase;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.10);
+  margin: 0;
+}
+
+.section-title {
+  font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.08);
+  margin-bottom: 1rem;
+}
+
+.section-lead { color: var(--char-soft); margin-bottom: 1.75rem; }
+
+/* Top Bar */
+.topbar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  background: var(--char);
+  color: var(--cream);
+  z-index: 1040;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.18);
+}
+
+.hamburger {
+  width: 46px; height: 40px;
+  display: inline-flex; flex-direction: column;
+  justify-content: center; gap: 5px;
+  padding: 0 9px;
+  background: transparent;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.hamburger:hover,
+.hamburger:focus-visible { background: rgba(255,255,255,0.12); }
+.hamburger span {
+  display: block; height: 3.5px; border-radius: 2px;
+  background: var(--cream);
+  transition: transform 0.2s ease;
+}
+
+.topbar-brand {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.01em;
+  color: var(--cream);
+  text-decoration: none;
+}
+.topbar-brand:hover { color: var(--clay-soft); }
+
+.topbar-cta {
+  margin-left: auto;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--char);
+  background: var(--gold);
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: transform 0.12s ease, background 0.15s ease;
+}
+.topbar-cta:hover { background: #d9a942; transform: translateY(-1px); color: var(--char); }
+
+/* Categories */
+.cat-offcanvas {
+  width: min(360px, 86vw);
+  background: var(--cream);
+  border-right: 4px solid var(--clay);
+}
+.cat-offcanvas .offcanvas-header {
+  background: var(--char);
+  color: var(--cream);
+  padding: 1.1rem 1.25rem;
+}
+.cat-title {
+  font-size: 2rem;
+  text-transform: uppercase;
+  color: var(--cream);
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.25);
+  margin: 0;
+}
+.cat-offcanvas .btn-close {
+  filter: invert(1) grayscale(1) brightness(1.6);
+}
+
+.cat-scroll { overflow-y: auto; padding: 0.5rem 0; }
+.cat-nav { display: flex; flex-direction: column; }
+
+.cat-link {
+  display: block;
+  padding: 0.85rem 1.25rem;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--char);
+  transition: background 0.14s ease, padding-left 0.14s ease;
+}
+.cat-link:hover { background: var(--cream-2); padding-left: 1.6rem; }
+.cat-link.is-active {
+  background: var(--cream-2);
+  box-shadow: inset 4px 0 0 var(--clay);
+}
+.cat-link-title {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.12rem;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.cat-link-tag { display: block; font-size: 0.82rem; color: var(--char-soft); }
+
+.cat-link--cta { background: rgba(179,74,42,0.08); }
+.cat-link--cta .cat-link-title { color: var(--clay-deep); }
+
+.offcanvas-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--line);
+  color: var(--char-soft);
+}
+
+/* Hero and History */
+.hero { background: linear-gradient(180deg, var(--cream) 0%, var(--cream-2) 100%); padding: 3rem 0 1rem; }
+.hero-inner { text-align: center; }
+.hero-eyebrow {
+  text-transform: uppercase; letter-spacing: 0.18em;
+  font-size: 0.78rem; font-weight: 700; color: var(--clay);
+  margin-bottom: 0.25rem;
+}
+.hero-title { font-size: clamp(3rem, 9vw, 6rem); text-shadow: 3px 3px 0 rgba(0,0,0,0.10); }
+.hero-sub { color: var(--char-soft); font-size: 1.05rem; max-width: 36ch; margin: 0.5rem auto 1.75rem; }
+
+.hero-frame {
+  margin: 0 auto;
+  max-width: 1000px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 12px;
+  box-shadow: 0 18px 40px rgba(42,37,33,0.14);
+}
+.hero-img { width: 100%; height: auto; border-radius: 12px; display: block; }
+
+.history { padding: 3.25rem 0; }
+.history-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-left: 6px solid var(--clay);
+  border-radius: 14px;
+  padding: 1.75rem 1.9rem;
+  box-shadow: 0 10px 26px rgba(42,37,33,0.07);
+  max-height: 460px;          
+  overflow-y: auto;
+  justify-content: center;
+  text-align: justify;
+}
+.history-card p { margin-bottom: 1rem; line-height: 1.75; }
+.history-card p:last-child { margin-bottom: 0; }
+
+/* Homepage shortcuts */
+.explore { padding: 1rem 0 3.5rem; }
+.explore-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.1rem;
+}
+.explore-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  text-decoration: none;
+  color: var(--char);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.explore-card:hover { transform: translateY(-4px); box-shadow: 0 16px 30px rgba(42,37,33,0.13); color: var(--char); }
+.explore-thumb { width: 100%; aspect-ratio: 3/2; object-fit: contain; display: block; }
+.explore-body { padding: 0.85rem 1rem 1.1rem; }
+.explore-name { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; margin: 0 0 0.2rem; }
+.explore-tag { font-size: 0.85rem; color: var(--char-soft); margin: 0; }
+
+/* Category Page */
+.category { padding: 2.5rem 0 3.5rem; }
+.category-head { margin-bottom: 1.75rem; }
+.category-tag { color: var(--char-soft); margin-top: 0.4rem; font-size: 1.05rem; }
+
+.cards-status {
+  display: flex; align-items: center; gap: 0.65rem;
+  color: var(--char-soft); padding: 1.5rem 0;
+}
+.cards-status[hidden] { display: none; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 1.25rem;
+  max-height: calc(100vh - 230px);
+  overflow-y: auto;
+  padding: 4px 4px 1.5rem;
+}
+
+/* The attraction cards */
+.attraction-card {
+  background: var(--cream-2);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  display: flex; flex-direction: column;
+  box-shadow: 0 6px 16px rgba(42,37,33,0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.attraction-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px rgba(42,37,33,0.15); }
+.attraction-media {
+  background: var(--paper);
+  border-radius: 10px;
+  overflow: hidden;
+  aspect-ratio: 4/3;
+}
+.attraction-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.attraction-name {
+  font-family: var(--font-display);
+  font-weight: 800; text-transform: uppercase;
+  font-size: 1.08rem; letter-spacing: -0.01em;
+  margin: 0.7rem 0 0.15rem;
+}
+.attraction-summary { font-size: 0.86rem; color: var(--char-soft); margin: 0 0 0.85rem; flex: 1; text-align: justify}
+.see-info {
+  align-self: flex-start;
+  font-weight: 600; font-size: 0.9rem;
+  color: var(--clay-deep);
+  background: transparent; border: 0; cursor: pointer;
+  padding: 0.25rem 0; 
+}
+.see-info::after { content: " →"; }
+.see-info:hover { color: var(--clay); text-decoration: underline; }
+
+/* Info cards */
+/* Blur everything behind the card while it's open. */
+body.info-modal-active .topbar,
+body.info-modal-active .site-main,
+body.info-modal-active .site-footer {
+  filter: blur(7px);
+  transition: filter 0.2s ease;
+}
+
+.site-main { flex: 1 0 auto; }
+
+body.info-modal-active .modal-backdrop.show {
+  --bs-backdrop-opacity: 0.28;
+  background-color: var(--char);
+}
+
+.info-modal .modal-content { border: 0; }
+.info-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.35);
+  position: relative;
+  overflow: hidden;
+}
+.info-close {
+  position: absolute; top: 0.9rem; right: 0.9rem; z-index: 3;
+  background-color: var(--paper); border-radius: 50%;
+  padding: 0.55rem; opacity: 0.9;
+}
+.info-body { padding: 0; }
+.info-media { background: var(--cream-2); }
+.info-img { width: 100%; max-height: 280px; object-fit: cover; display: block; }
+.info-text { padding: 1.5rem 1.75rem 1.9rem; }
+.info-eyebrow {
+  text-transform: uppercase; letter-spacing: 0.16em;
+  font-size: 0.74rem; font-weight: 800; color: var(--clay);
+  margin: 0 0 0.2rem;
+}
+.info-name { font-size: 1.9rem; text-transform: uppercase; margin: 0 0 0.35rem; }
+.info-location { color: var(--teal); font-weight: 600; font-size: 0.92rem; margin: 0 0 0.75rem; }
+.info-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.9rem; }
+.info-chip {
+  font-size: 0.74rem; font-weight: 600;
+  background: var(--cream-2); color: var(--char-soft);
+  border: 1px solid var(--line);
+  padding: 0.22rem 0.6rem; border-radius: 999px;
+}
+.info-about { line-height: 1.5; margin-bottom: 1.25rem; text-align: justify;}
+
+/* Buttons */
+.btn-clay {
+  background: var(--clay); border: 1px solid var(--clay);
+  color: var(--paper); font-weight: 600;
+  border-radius: 999px;
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+.btn-clay:hover { background: var(--clay-deep); border-color: var(--clay-deep); color: var(--paper); transform: translateY(-1px); }
+.btn-outline-clay {
+  background: rgba(255,253,248,0.90); border: 1.5px solid var(--clay);
+  color: var(--clay-deep); font-weight: 600; border-radius: 999px;
+}
+.btn-outline-clay:hover { background: var(--clay); color: var(--paper); }
+
+/* Registration form */
+.register { padding: 2.5rem 0 4rem; }
+.register-inner { max-width: 760px; }
+.register-head { margin-bottom: 1.5rem; }
+.register-tag { color: var(--char-soft); margin-top: 0.5rem; }
+.register-form {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 1.75rem;
+  box-shadow: 0 12px 30px rgba(42,37,33,0.08);
+}
+.form-label { font-weight: 600; }
+.form-label .opt { font-weight: 400; color: var(--char-soft); font-size: 0.85em; }
+.form-control:focus, .form-select:focus {
+  border-color: var(--clay-soft);
+  box-shadow: 0 0 0 0.2rem rgba(179,74,42,0.18);
+}
+.field-error { color: #b3261e; font-size: 0.82rem; min-height: 1rem; margin-top: 0.25rem; }
+.is-invalid-field { border-color: #b3261e !important; }
+.register-actions { margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: center; }
+.btn-spinner { margin-left: 0.5rem; }
+
+.form-banner {
+  margin-top: 1.25rem;
+  background: #fdecea; border: 1px solid #f5c6c0; color: #8a1c12;
+  border-radius: 10px; padding: 0.8rem 1rem; font-size: 0.92rem;
+}
+
+/* Confirmation */
+.confirm { padding: 2.75rem 0 4rem; }
+.confirm-inner { max-width: 720px; }
+.confirm-badge {
+  display: inline-block;
+  background: var(--teal); color: var(--paper);
+  font-weight: 700; font-size: 0.85rem;
+  padding: 0.3rem 0.85rem; border-radius: 999px;
+  margin-bottom: 0.85rem;
+}
+.confirm-tag { color: var(--char-soft); margin: 0.5rem 0 1.5rem; }
+.profile-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 12px 30px rgba(42,37,33,0.08);
+}
+.profile-row {
+  display: flex; justify-content: space-between; gap: 1rem;
+  padding: 0.85rem 0; border-bottom: 1px solid var(--line);
+}
+.profile-row:last-child { border-bottom: 0; }
+.profile-key { color: var(--char-soft); font-weight: 600; }
+.profile-val { text-align: right; font-weight: 500; word-break: break-word; }
+.confirm-actions { display: flex; gap: 0.75rem; margin-top: 1.5rem; flex-wrap: wrap; }
+
+/* Itinerary builder — chosen-stops list.
+   The container is beige (cream); each chosen item sits on a slightly darker
+   beige so the stops stand out from the box for contrast and aesthetic. */
+.itinerary-list {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 0.85rem;
+  box-shadow: 0 12px 30px rgba(42,37,33,0.08);
+}
+.itin-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  background: var(--cream-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.7rem 0.95rem;
+  margin-bottom: 0.6rem;
+}
+.itin-item:last-child { margin-bottom: 0; }
+.itin-name { font-weight: 600; color: var(--char); word-break: break-word; }
+.itin-empty {
+  color: var(--char-soft); text-align: center;
+  padding: 0.9rem 0.5rem; font-style: italic;
+}
+/* Booking history — cancel action row */
+.booking-actions { display: flex; justify-content: flex-end; padding-top: 0.85rem; }
+
+/* Footer */
+.site-footer {
+  background: var(--char); color: var(--cream);
+  text-align: center; padding: 2rem 1rem;
+  flex-shrink: 0;
+}
+.site-footer .text-muted { color: #b9ad99 !important; }
+.notfound { padding: 5rem 0; }
+.notfound-lead { color: var(--char-soft); font-size: 1.1rem; margin: 1rem 0 1.75rem; }
+
+/* Accessibility and Motion */
+a:focus-visible, button:focus-visible, .form-control:focus-visible {
+  outline: 3px solid var(--gold); outline-offset: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}
+
+@media (max-width: 576px) {
+  .topbar-brand { display: none; }
+  .info-name { font-size: 1.55rem; }
+  .card-grid { max-height: none; overflow: visible; } /* let page scroll on phones */
+}
+
+
+/* Image background */
+:root{
+  --bg-image: url("app-images/IlocosBG.jpg");
+  --scrim: linear-gradient(180deg, rgba(11, 8, 6, 0.42) 0%, rgba(24,15,10,0.26) 42%, rgba(24,15,10,0.40) 100%);
+}
+body{
+  background-image: var(--scrim), var(--bg-image);
+  background-repeat: no-repeat, no-repeat;
+  background-size: cover, cover;
+  background-position: center top, center top;
+  background-attachment: fixed, fixed;
+  min-height: 100vh;
+}
+.hero{ background: transparent; }
+.hero-title,.section-title,.display-title{
+  color:#fff6e9;
+  text-shadow:0 2px 18px rgba(0,0,0,0.45), 0 1px 3px rgba(0,0,0,0.6);
+}
+/* keep the modal title dark on its paper card */
+.info-name{ color:var(--char); text-shadow:none; }
+.hero-eyebrow{ color:#ffd9a8; text-shadow:0 1px 8px rgba(0,0,0,0.55); }
+.hero-sub,.section-lead,.category-tag,.register-tag,.confirm-tag,.notfound-lead{
+  color:rgba(255,248,238,0.96);
+  text-shadow:0 1px 10px rgba(0,0,0,0.55);
+}
+.cards-status{ color:rgba(255,248,238,0.96); text-shadow:0 1px 8px rgba(0,0,0,0.55); }
+.cards-status .spinner-border{ color:#fff6e9; }
+.history-card,.hero-frame,.explore-card,.attraction-card,.register-form,.profile-card{
+  box-shadow:0 18px 44px rgba(0,0,0,0.28);
+}
+
+/* Developer Info page */
+.developers { padding: 2.5rem 0 4rem; }
+.dev-header { margin-bottom: 2.5rem; }
+.dev-group-badge {
+  display: inline-block;
+  background: var(--clay);
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.3rem 0.9rem;
+  border-radius: 999px;
+  margin-bottom: 0.9rem;
+}
+.dev-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.75rem;
+}
+.dev-card {
+  background: var(--paper);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  text-align: center;
+  padding-bottom: 1.25rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+}
+.dev-photo {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: var(--cream-2);
+}
+.dev-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.dev-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1.05rem;
+  color: var(--char);
+  margin: 0.9rem 0.75rem 0.2rem;
+  text-shadow: none;
+}
+.dev-role {
+  font-size: 0.82rem;
+  color: var(--char-soft);
+  margin: 0 0.75rem;
+}
+
+/* Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(42, 37, 33, 0.45) transparent;
+}
+*::-webkit-scrollbar { width: 10px; height: 10px; }
+*::-webkit-scrollbar-track { background: transparent; }      
+*::-webkit-scrollbar-thumb {
+  background: rgba(42, 37, 33, 0.45);
+  border-radius: 999px;
+  border: 2px solid transparent;         
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(42, 37, 33, 0.65); }
+*::-webkit-scrollbar-button { display: none; width: 0; height: 0; } 
+*::-webkit-scrollbar-corner { background: transparent; }
+  </style>
+</head>
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <button class="hamburger" type="button"
+            data-bs-toggle="offcanvas" data-bs-target="#categoriesMenu"
+            aria-controls="categoriesMenu" aria-label="Open categories menu">
+      <span></span><span></span><span></span>
+    </button>
+    <a class="topbar-brand" href="#/">Ilocos&nbsp;Sur</a>
+    <a class="topbar-cta" href="#/itinerary">Book&nbsp;a&nbsp;Visit</a>
+  </header>
+
+  <!-- CATEGORIES OFFCANVAS -->
+  <div class="offcanvas offcanvas-start cat-offcanvas" tabindex="-1"
+       id="categoriesMenu" aria-labelledby="categoriesMenuLabel">
+    <div class="offcanvas-header">
+      <h2 class="cat-title" id="categoriesMenuLabel">Categories</h2>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+              aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body cat-scroll">
+      <nav class="cat-nav" id="catNav"><!-- built by JS --></nav>
+    </div>
+    <div class="offcanvas-footer"><small>Ilocos Sur Tourism Portal</small></div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <main class="site-main" id="app"></main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p class="mb-1"><strong>Ilocos Sur Tourism Portal</strong></p>
+      <p class="mb-0 text-muted small">
+        Final Requirement for the course <strong>COMP 016</strong> &middot; Web Development
+      </p>
+    </div>
+  </footer>
+
+  <!-- INFO CARD MODAL -->
+  <div class="modal fade info-modal" id="infoModal" tabindex="-1"
+       aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content info-card">
+        <button type="button" class="btn-close info-close" data-bs-dismiss="modal"
+                aria-label="Close"></button>
+        <div class="modal-body info-body">
+          <div class="info-media">
+            <img id="infoImage" class="info-img" src="" alt="">
+          </div>
+          <div class="info-text">
+            <p class="info-eyebrow">About</p>
+            <h2 class="info-name" id="infoModalLabel"></h2>
+            <p class="info-location" id="infoLocation"></p>
+            <div class="info-tags" id="infoTags"></div>
+            <p class="info-about" id="infoAbout"></p>
+            <!-- Hotel stay details — visible only for "Where to Stay" items -->
+            <div id="hotelFields" hidden style="margin-bottom:1rem">
+              <hr style="margin:0.5rem 0 0.75rem">
+              <p style="font-size:0.78rem;font-weight:800;text-transform:uppercase;letter-spacing:0.1em;color:var(--clay);margin-bottom:0.6rem">Stay details</p>
+              <div class="row g-2">
+                <div class="col-6">
+                  <label class="form-label" for="hotelCheckin" style="font-size:0.85rem;margin-bottom:0.25rem">Check-in date</label>
+                  <input class="form-control form-control-sm" id="hotelCheckin" type="date">
+                  <div class="field-error" id="hotelCheckinErr" style="font-size:0.78rem"></div>
+                </div>
+                <div class="col-6">
+                  <label class="form-label" for="hotelDays" style="font-size:0.85rem;margin-bottom:0.25rem">Number of days</label>
+                  <input class="form-control form-control-sm" id="hotelDays" type="number" min="1" max="365" value="1" placeholder="1">
+                  <div class="field-error" id="hotelDaysErr" style="font-size:0.78rem"></div>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-clay info-book" id="infoBook">
+              Plan a visit here
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Forgot Password Modal -->
+  <div class="modal fade" id="forgotPwModal" tabindex="-1" aria-labelledby="forgotPwModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:380px">
+      <div class="modal-content" style="border-radius:18px;border:1px solid var(--line);background:var(--paper)">
+        <div class="modal-header" style="border-bottom:1px solid var(--line);padding:1rem 1.25rem">
+          <h5 class="modal-title" style="font-family:var(--font-display);font-weight:800;font-size:1.2rem" id="forgotPwModalLabel">Reset password</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" style="padding:1.25rem">
+          <p style="font-size:0.9rem;color:var(--char-soft);margin-bottom:0.9rem">Enter your registered email and a new password.</p>
+          <div style="display:flex;flex-direction:column;gap:0.75rem">
+            <div>
+              <label class="form-label" for="forgotPwEmail" style="font-size:0.85rem">Email address</label>
+              <input class="form-control" id="forgotPwEmail" type="email" placeholder="you@example.com" autocomplete="email">
+            </div>
+            <div>
+              <label class="form-label" for="forgotPwNew" style="font-size:0.85rem">New password <span style="font-weight:400;color:var(--char-soft)">(at least 8 characters)</span></label>
+              <input class="form-control" id="forgotPwNew" type="password" autocomplete="new-password">
+            </div>
+          </div>
+          <div id="forgotPwMsg" style="font-size:0.82rem;min-height:1.2rem;margin-top:0.75rem"></div>
+        </div>
+        <div class="modal-footer" style="border-top:1px solid var(--line);padding:0.85rem 1.25rem;gap:0.5rem">
+          <button type="button" class="btn btn-outline-clay btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-clay btn-sm" id="forgotPwSubmit">Reset password</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cancel Booking Confirmation Modal -->
+  <div class="modal fade" id="cancelConfirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" style="max-width:380px">
+      <div class="modal-content" style="border-radius:18px;border:1px solid var(--line);background:var(--paper)">
+        <div class="modal-header" style="border-bottom:1px solid var(--line);padding:1rem 1.25rem">
+          <h5 class="modal-title" style="font-family:var(--font-display);font-weight:800;font-size:1.2rem">Cancel booking?</h5>
+        </div>
+        <div class="modal-body" style="padding:1.25rem">
+          <p style="font-size:0.9rem;color:var(--char-soft);margin-bottom:0" id="cancelConfirmMsg"></p>
+        </div>
+        <div class="modal-footer" style="border-top:1px solid var(--line);padding:0.85rem 1.25rem;gap:0.5rem">
+          <button type="button" class="btn btn-outline-clay btn-sm" data-bs-dismiss="modal">Keep booking</button>
+          <button type="button" class="btn btn-clay btn-sm" id="cancelConfirmOk">Yes, cancel it</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS bundle (offcanvas, modal) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          crossorigin="anonymous"></script>
+
+  <script>
+/* Application Logic */
+(function () {
+  "use strict";
+
+  /* Content data */
+  var DATA = {
+  "categories": [
+    {
+      "slug": "food",
+      "title": "Food",
+      "tagline": "Ilocano delicacies that will satisfy your cuisine curiosity",
+      "image": "app-images/Food.png"
+    },
+    {
+      "slug": "beach",
+      "title": "Beach",
+      "tagline": "Breathtaking coves and golden shorelines",
+      "image": "app-images/Beach.png"
+    },
+    {
+      "slug": "historical",
+      "title": "Historical / Educational",
+      "tagline": "Where Spanish-colonial heritage still stands",
+      "image": "app-images/Historic.png"
+    },
+    {
+      "slug": "church",
+      "title": "Church / Religious",
+      "tagline": "Centuries-old faith in stone and brick",
+      "image": "app-images/Church.png"
+    },
+    {
+      "slug": "arts",
+      "title": "Arts, Crafts & Culture",
+      "tagline": "Showcases the artistic heritage of the province",
+      "image": "app-images/Arts.png"
+    },
+    {
+      "slug": "festivals",
+      "title": "Festivals & Events",
+      "tagline": "The province at its most colorful",
+      "image": "app-images/Festivals.png"
+    },
+    {
+      "slug": "nature",
+      "title": "Nature & Adventure",
+      "tagline": "Beautiful landscapes and waterforms that tourists must explore",
+      "image": "app-images/Nature.png"
+    },
+    {
+      "slug": "pasalubong",
+      "title": "Pasalubong (Souvenirs)",
+      "tagline": "Take a piece of Ilocos Sur home",
+      "image": "app-images/Pasalubong.png"
+    },
+    {
+      "slug": "stay",
+      "title": "Where to Stay",
+      "tagline": "Heritage inns and modern comfort",
+      "image": "app-images/Stay.png"
+    },
+    {
+      "slug": "transportation",
+      "title": "Getting Around",
+      "tagline": "Calesa, tricycle, jeepney, and beyond",
+      "image": "app-images/Transportation.png"
+    }
+  ]
+};
+
+  var DEVELOPERS = {
+    group: "2",   /* ← replace X with your actual group number */
+    members: [
+      { name: "Erika Joy Fernandez", role: "Developer", image: "app-images/dev1.png" },
+      { name: "Railley Nieles", role: "Developer", image: "app-images/dev2.jpg" },
+      { name: "Justin Villamor", role: "Developer", image: "app-images/dev3.JPG" },
+      { name: "Kurt Germagne Viray", role: "Developer", image: "app-images/dev4.jpg" },
+    ]
+  };
+
+  /* helper functions */
+  function $(s, r){ return (r||document).querySelector(s); }
+  function esc(s){
+    return String(s==null?"":s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+  function b64(str){ return btoa(unescape(encodeURIComponent(str))); }
+  function delay(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function todayISO(){
+    var d = new Date();
+    var mm = String(d.getMonth() + 1).padStart(2, '0');
+    var dd = String(d.getDate()).padStart(2, '0');
+    return d.getFullYear() + '-' + mm + '-' + dd;
+  }
+  function uuid(){
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c){
+      var r = Math.random()*16|0, v = c==="x"?r:(r&0x3|0x8); return v.toString(16);
+    });
+  }
+
+  /* ----- placeholder image generator (was the Flask /placeholder route) -- */
+  function placeholderURI(text, w, h){
+    w = w||640; h = h||420;
+    var fs = Math.max(14, Math.floor(Math.min(w,h)/9));
+    var t = esc(text);
+    var svg =
+      '<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'" viewBox="0 0 '+w+' '+h+'">'
+      + '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">'
+      + '<stop offset="0" stop-color="#e9dcc6"/><stop offset="1" stop-color="#d8c3a3"/></linearGradient></defs>'
+      + '<rect width="100%" height="100%" fill="url(#g)"/>'
+      + '<rect x="6" y="6" width="'+(w-12)+'" height="'+(h-12)+'" fill="none" stroke="#b9986a" stroke-width="2" stroke-dasharray="9 7"/>'
+      + '<text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="'+fs+'" fill="#7a5a35">'+t+'</text>'
+      + '<text x="50%" y="'+(h-18)+'" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#9a7a52">image placeholder</text>'
+      + '</svg>';
+    return "data:image/svg+xml;base64," + b64(svg);
+  }
+
+  // Build an <img> for an item: use its real image if set (falling back to a
+  // generated placeholder if that file is missing), else the placeholder.
+  function imgTag(item, w, h, cls){
+    var ph = placeholderURI(item.name, w, h);
+    var src = item.image ? item.image : ph;
+    return '<img class="'+cls+'" src="'+esc(src)+'" alt="'+esc(item.name)+'" loading="lazy" '
+         + 'onerror="this.onerror=null;this.src=\''+ph+'\'">';
+  }
+
+  /* ----- in-memory store (was the database) ------------------------------ */
+  // Records live only for this browser session; reloading clears them.
+  var store = { regs: {} };
+
+  /* ----- async "API" (was the Flask JSON endpoints) ---------------------- */
+  // Small delays make the asynchronous (AJAX-style) loading states visible.
+  var EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+  function isValidCategory(slug){
+    return DATA.categories.some(function(c){ return c.slug === slug; });
+  }
+  function getCategory(slug){
+    return DATA.categories.filter(function(c){ return c.slug === slug; })[0] || null;
+  }
+
+  // Real AJAX transport to the PHP/MySQL backend
+  var API_BASE = (function(){
+    var p = location.pathname;
+    return p.slice(0, p.lastIndexOf("/") + 1); // trailing-slash dir of this page
+  })();
+
+  // CSRF token for state-changing requests. Fetched once on boot from
+  // GET /api/csrf and sent back in the X-CSRF-Token header on every POST.
+  var CSRF_TOKEN = "";
+  function loadCsrf(){
+    return apiRequest("GET", "/api/csrf").then(function(d){
+      CSRF_TOKEN = (d && d.csrf_token) || "";
+      return CSRF_TOKEN;
+    }).catch(function(){ return ""; });
+  }
+
+  function apiRequest(method, url, body){
+    if (url.charAt(0) === "/") url = API_BASE + url.slice(1); // subfolder-safe on XAMPP
+    var opts = {
+      method: method,
+      headers: { "Accept": "application/json" },
+      credentials: "same-origin" // send the session cookie
+    };
+    if (body !== undefined){
+      opts.headers["Content-Type"] = "application/json";
+      opts.body = JSON.stringify(body);
+    }
+    // Attach the CSRF token to anything that can change server state.
+    if (method !== "GET" && method !== "HEAD" && CSRF_TOKEN){
+      opts.headers["X-CSRF-Token"] = CSRF_TOKEN;
+    }
+    return fetch(url, opts).then(function(res){
+      var ct = res.headers.get("content-type") || "";
+      var parse = ct.indexOf("application/json") !== -1
+        ? res.json().catch(function(){ return {}; })
+        : Promise.resolve({});
+      return parse.then(function(data){
+        if (!res.ok){
+          var e = new Error((data && (data.error || data.message)) || ("Request failed (" + res.status + ")"));
+          e.status = res.status;
+          if (data && data.errors) e.errors = data.errors;
+          throw e;
+        }
+        return data;
+      });
+    });
+  }
+
+  var api = {
+    getCategories: function(){
+      return apiRequest("GET", "/api/categories");
+    },
+    getAttractions: function(slug){
+      return apiRequest("GET", "/api/categories/" + encodeURIComponent(slug) + "/items");
+    },
+    getItem: function(slug, id){
+      return apiRequest("GET", "/api/categories/" + encodeURIComponent(slug) + "/items/" + encodeURIComponent(id));
+    },
+    // legacy traveler-profile flow (kept for compatibility)
+    register: function(payload){
+      return apiRequest("POST", "/api/registrations", payload);
+    },
+    getRegistration: function(id){
+      return apiRequest("GET", "/api/registrations/" + encodeURIComponent(id));
+    },
+    // account system
+    me: function(){
+      return apiRequest("GET", "/api/auth/me");
+    },
+    signup: function(payload){
+      return apiRequest("POST", "/api/auth/register", payload);
+    },
+    login: function(payload){
+      return apiRequest("POST", "/api/auth/login", payload);
+    },
+    logout: function(){
+      return apiRequest("POST", "/api/auth/logout", {});
+    },
+    // itinerary booking + history
+    createBooking: function(payload){
+      return apiRequest("POST", "/api/bookings", payload);
+    },
+    getBookings: function(){
+      return apiRequest("GET", "/api/bookings");
+    },
+    getBooking: function(id){
+      return apiRequest("GET", "/api/bookings/" + encodeURIComponent(id));
+    },
+    cancelBooking: function(id){
+      return apiRequest("DELETE", "/api/bookings/" + encodeURIComponent(id));
+    },
+    resetPassword: function(payload){
+      return apiRequest("POST", "/api/auth/reset-password", payload);
+    }
+  };
+
+  /* ----- client-side auth state ----------------------------------------- */
+  // Mirrors the server session so the UI can show the right nav + guard routes.
+  // The server is always the real authority; this is only for rendering.
+  var AUTH = { user: null };
+  function refreshAuth(){
+    return api.me().then(function(d){
+      AUTH.user = (d && d.user) ? d.user : null;
+      return AUTH.user;
+    }).catch(function(){ AUTH.user = null; return null; });
+  }
+
+  /* Cancel-booking confirmation modal helper */
+  function confirmCancel(title, onConfirm) {
+    var msgEl = document.getElementById("cancelConfirmMsg");
+    if (msgEl) msgEl.textContent = 'Cancel "' + title + '"? This cannot be undone.';
+    var okBtn = document.getElementById("cancelConfirmOk");
+    var modalEl = document.getElementById("cancelConfirmModal");
+    var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+    // Clone to remove any previous one-time listener
+    var freshOk = okBtn.cloneNode(true);
+    okBtn.parentNode.replaceChild(freshOk, okBtn);
+    freshOk.addEventListener("click", function() {
+      modal.hide();
+      onConfirm();
+    });
+    modal.show();
+  }
+
+  /* Validation */
+  function validateRegistration(p){
+    p = p || {};
+    var errors = {}, cleaned = {};
+
+    var fullName = String(p.full_name||"").trim();
+    if (fullName.length < 2) errors.full_name = "Please enter your full name.";
+    cleaned.full_name = fullName;
+
+    var email = String(p.email||"").trim();
+    if (!EMAIL_RE.test(email)) errors.email = "Please enter a valid email address.";
+    cleaned.email = email;
+
+    cleaned.phone = String(p.phone||"").trim();
+
+    var category = String(p.category||"").trim();
+    if (category && !isValidCategory(category)) errors.category = "Please choose a valid category.";
+    cleaned.category = category;
+
+    cleaned.attraction = String(p.attraction||"").trim();
+
+    var visit = String(p.visit_date||"").trim();
+    if (visit){
+      var ok = /^\d{4}-\d{2}-\d{2}$/.test(visit) && !isNaN(new Date(visit).getTime());
+      if (!ok) errors.visit_date = "Please use a valid date.";
+    }
+    cleaned.visit_date = visit;
+
+    var travelers = parseInt(p.travelers, 10);
+    if (isNaN(travelers) || travelers < 1 || travelers > 100){
+      errors.travelers = "Travelers must be a number between 1 and 100.";
+      travelers = null;
+    }
+    cleaned.travelers = travelers;
+
+    cleaned.notes = String(p.notes||"").trim();
+    return { cleaned: cleaned, errors: errors };
+  }
+
+  /* Views */
+  function viewHome(){
+    var heroImg = '<iframe class="hero-img" title="Map of Ilocos Sur" '
+      + 'src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d833108.4924802962!2d120.79121885836076!3d17.28736784934246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x338e3e395bcef0b5%3A0xf338d7611b98ada3!2sIlocos%20Sur!5e0!3m2!1sen!2sph!4v1781369097833!5m2!1sen!2sph" '
+      + 'style="border:0;width:100%;height:460px;border-radius:12px;display:block" '
+      + 'allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>';
+
+    var explore = DATA.categories.map(function(c){
+      return ''
+        + '<a class="explore-card" href="#/'+c.slug+'">'
+        +   '<img class="explore-thumb" alt="'+esc(c.title)+'" loading="lazy"'
+        +     ' src="'+(c.image ? esc(c.image) : placeholderURI(c.title, 420, 280))+'"'
+        +     ' onerror="this.onerror=null;this.src=\''+placeholderURI(c.title, 420, 280)+'\'">'
+        +   '<div class="explore-body">'
+        +     '<h3 class="explore-name">'+esc(c.title)+'</h3>'
+        +     '<p class="explore-tag">'+esc(c.tagline)+'</p>'
+        +   '</div>'
+        + '</a>';
+    }).join("");
+
+    return ''
+    + '<section class="hero"><div class="container hero-inner">'
+    +   '<p class="hero-eyebrow">Welcome to the Province of</p>'
+    +   '<h1 class="hero-title">Ilocos Sur</h1>'
+    +   '<p class="hero-sub">Heritage cobblestones, baroque churches, and the flavors of the North</p>'
+    +   '<figure class="hero-frame">'+heroImg+'</figure>'
+    + '</div></section>'
+
+    + '<section class="history" id="history"><div class="container">'
+    +   '<h2 class="section-title">History</h2>'
+    +   '<div class="history-card">'
+    +     '<p>Ilocos Sur sits on the northwestern coast of Luzon, facing the West Philippine Sea. '
+    +     'Long before Spanish contact, its coastal settlements traded with merchants from China and beyond. '
+    +     'In 1572 the conquistador Juan de Salcedo reached the Bigan river delta and founded the town that '
+    +     'would become <strong>Vigan</strong>, laying out the grid of streets and plazas that still defines the city today.</p>'
+    +     '<p>Through the Spanish colonial centuries, Vigan grew into a prosperous trading hub where Chinese, '
+    +     'Spanish, and Ilocano cultures fused into a distinctive mestizo society. That heritage is written into the '
+    +     '<em>bahay-na-bato</em> mansions of Calle Crisologo, the earthquake-baroque churches of Santa Maria and Bantay, '
+    +     'and the burnay jars still thrown by hand in the city\'s pottery kilns.</p>'
+    +     '<p>The province also carries the weight of the nation\'s history — from the last stand of the young '
+    +     'General Gregorio del Pilar at Tirad Pass in 1899, to its role as the home province of President Elpidio Quirino. '
+    +     'Today Vigan is recognized as a UNESCO World Heritage Site, one of the best-preserved Hispanic colonial towns in Asia, '
+    +     'and the gateway to a province rich in food, faith, craft, and coastline.</p>'
+    +   '</div>'
+    + '</div></section>'
+
+    + '<section class="explore"><div class="container">'
+    +   '<h2 class="section-title">Explore by category</h2>'
+    +   '<p class="section-lead">Tap the three lines at the top-left any time to open the full menu, or jump straight in below.</p>'
+    +   '<div class="explore-grid">'+explore+'</div>'
+    + '</div></section>';
+  }
+
+  function viewCategory(slug){
+    var c = getCategory(slug);
+    return ''
+    + '<section class="category" data-category="'+esc(slug)+'"><div class="container">'
+    +   '<header class="category-head">'
+    +     '<h1 class="display-title">'+esc(c.title)+'</h1>'
+    +     '<p class="category-tag">'+esc(c.tagline)+'</p>'
+    +   '</header>'
+    +   '<div id="cardsStatus" class="cards-status" role="status">'
+    +     '<div class="spinner-border" aria-hidden="true"></div>'
+    +     '<span>Loading '+esc(c.title.toLowerCase())+'…</span>'
+    +   '</div>'
+    +   '<div id="cardGrid" class="card-grid" aria-live="polite"></div>'
+    + '</div></section>';
+  }
+
+  /* ----- Account: Sign up ------------------------------------------------ */
+  function viewSignup(){
+    return ''
+    + '<section class="register"><div class="container register-inner">'
+    +   '<header class="register-head">'
+    +     '<h1 class="display-title">Create your account</h1>'
+    +     '<p class="register-tag">Sign up to plan itineraries and keep your booking history.</p>'
+    +   '</header>'
+    +   '<form id="signupForm" class="register-form" novalidate>'
+    +     '<div class="row g-3">'
+    +       '<div class="col-12"><label class="form-label" for="su_full_name">Full name</label>'
+    +         '<input class="form-control" id="su_full_name" name="full_name" type="text" autocomplete="name" required>'
+    +         '<div class="field-error" data-error-for="full_name"></div></div>'
+    +       '<div class="col-12"><label class="form-label" for="su_email">Email</label>'
+    +         '<input class="form-control" id="su_email" name="email" type="email" autocomplete="email" required>'
+    +         '<div class="field-error" data-error-for="email"></div></div>'
+    +       '<div class="col-12"><label class="form-label" for="su_password">Password <span class="opt">(at least 8 characters)</span></label>'
+    +         '<input class="form-control" id="su_password" name="password" type="password" autocomplete="new-password" required>'
+    +         '<div class="field-error" data-error-for="password"></div></div>'
+    +     '</div>'
+    +     '<div class="form-banner" id="formBanner" role="alert" hidden></div>'
+    +     '<div class="register-actions">'
+    +       '<button class="btn btn-clay btn-lg" type="submit" id="submitBtn">'
+    +         '<span class="btn-label">Create account</span>'
+    +         '<span class="spinner-border spinner-border-sm btn-spinner" hidden aria-hidden="true"></span>'
+    +       '</button>'
+    +       '<a class="btn btn-outline-clay btn-lg" href="#/login">I already have an account</a>'
+    +     '</div>'
+    +   '</form>'
+    + '</div></section>';
+  }
+
+  /* ----- Account: Log in ------------------------------------------------- */
+  function viewLogin(){
+    return ''
+    + '<section class="register"><div class="container register-inner">'
+    +   '<header class="register-head">'
+    +     '<h1 class="display-title">Welcome back</h1>'
+    +     '<p class="register-tag">Log in to build an itinerary and view your bookings.</p>'
+    +   '</header>'
+    +   '<form id="loginForm" class="register-form" novalidate>'
+    +     '<div class="row g-3">'
+    +       '<div class="col-12"><label class="form-label" for="li_email">Email</label>'
+    +         '<input class="form-control" id="li_email" name="email" type="email" autocomplete="email" required>'
+    +         '<div class="field-error" data-error-for="email"></div></div>'
+    +       '<div class="col-12">'
+    +         '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.35rem">'
+    +           '<label class="form-label mb-0" for="li_password">Password</label>'
+    +           '<button type="button" id="forgotPwBtn" style="font-size:0.82rem;color:var(--clay);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline">Forgot password?</button>'
+    +         '</div>'
+    +         '<div class="input-group">'
+    +           '<input class="form-control" id="li_password" name="password" type="password" autocomplete="current-password" required>'
+    +           '<button class="btn" type="button" id="togglePwBtn" style="border:1px solid #ced4da;background:var(--paper);color:var(--char-soft);padding:0 0.8rem;font-size:0.85rem;font-weight:600" title="Toggle password visibility">Show</button>'
+    +         '</div>'
+    +         '<div class="field-error" data-error-for="password"></div>'
+    +       '</div>'
+    +     '</div>'
+    +     '<div class="form-banner" id="formBanner" role="alert" hidden></div>'
+    +     '<div class="register-actions">'
+    +       '<button class="btn btn-clay btn-lg" type="submit" id="submitBtn">'
+    +         '<span class="btn-label">Log in</span>'
+    +         '<span class="spinner-border spinner-border-sm btn-spinner" hidden aria-hidden="true"></span>'
+    +       '</button>'
+    +       '<a class="btn btn-outline-clay btn-lg" href="#/signup">Create an account</a>'
+    +     '</div>'
+    +   '</form>'
+    + '</div></section>';
+  }
+
+  /* ----- Itinerary builder (the booking form) ---------------------------- */
+  // Replaces the old "Book a Visit" form. A logged-in user names the trip,
+  // picks attractions from the catalog (loaded via AJAX per category), sets a
+  // date + travelers, and submits — creating a booking saved to their history.
+  function viewItinerary(prefill){
+    prefill = prefill || {};
+    var preCat = (prefill.cat && isValidCategory(prefill.cat)) ? prefill.cat : "";
+    var catOptions = DATA.categories.map(function(c){
+      var sel = (preCat === c.slug) ? ' selected' : '';
+      return '<option value="'+esc(c.slug)+'"'+sel+'>'+esc(c.title)+'</option>';
+    }).join("");
+
+    return ''
+    + '<section class="register"><div class="container register-inner">'
+    +   '<header class="register-head">'
+    +     '<h1 class="display-title">Plan your itinerary</h1>'
+    +     '<p class="register-tag">Build a trip by adding attractions, then book it to your history.</p>'
+    +   '</header>'
+    +   '<form id="itineraryForm" class="register-form" novalidate>'
+    +     '<div class="row g-3">'
+    +       '<div class="col-md-6"><label class="form-label" for="trip_title">Trip name</label>'
+    +         '<input class="form-control" id="trip_title" name="trip_title" type="text" placeholder="e.g. Vigan heritage weekend" required>'
+    +         '<div class="field-error" data-error-for="trip_title"></div></div>'
+    +       '<div class="col-md-3"><label class="form-label" for="travelers">Travelers</label>'
+    +         '<input class="form-control" id="travelers" name="travelers" type="number" min="1" max="100" value="1" required>'
+    +         '<div class="field-error" data-error-for="travelers"></div></div>'
+    +       '<div class="col-md-3"><label class="form-label" for="visit_date">Visit date <span class="opt">(optional)</span></label>'
+    +         '<input class="form-control" id="visit_date" name="visit_date" type="date" min="'+esc(todayISO())+'"' + (prefill.checkin ? ' value="'+esc(prefill.checkin)+'"' : '') + '>'
+    +         '<div class="field-error" data-error-for="visit_date"></div></div>'
+    +     '</div>'
+
+    +     '<hr class="my-4">'
+    +     '<h2 class="section-title" style="font-size:1.4rem;margin-bottom:.75rem">Add attractions</h2>'
+    +     '<div class="row g-3 align-items-end">'
+    +       '<div class="col-md-7"><label class="form-label" for="pickCategory">Browse a category</label>'
+    +         '<select class="form-select" id="pickCategory">'+catOptions+'</select></div>'
+    +       '<div class="col-md-5"><div id="pickStatus" class="field-error" style="min-height:0"></div></div>'
+    +     '</div>'
+    +     '<div id="pickGrid" class="card-grid" aria-live="polite" style="margin-top:1rem"></div>'
+
+    +     '<hr class="my-4">'
+    +     '<h2 class="section-title" style="font-size:1.4rem;margin-bottom:.75rem">Your itinerary</h2>'
+    +     '<div id="itinerary" class="itinerary-list"></div>'
+    +     '<div class="field-error" data-error-for="items"></div>'
+
+    +     '<div id="hotelStaySection" hidden>'
+    +       '<hr class="my-4">'
+    +       '<h2 class="section-title" style="font-size:1.4rem;margin-bottom:.4rem">Hotel stay details</h2>'
+    +       '<p style="font-size:0.88rem;color:rgba(255,248,238,0.82);margin-bottom:.75rem">Your itinerary includes a hotel. Enter check-in details below.</p>'
+    +       '<div class="row g-3">'
+    +         '<div class="col-md-6"><label class="form-label" for="checkin_date">Check-in date</label>'
+    +           '<input class="form-control" id="checkin_date" name="checkin_date" type="date" min="'+esc(todayISO())+'"' + (prefill.checkin ? ' value="'+esc(prefill.checkin)+'"' : '') + '>'
+    +           '<div class="field-error" data-error-for="checkin_date"></div></div>'
+    +         '<div class="col-md-6"><label class="form-label" for="stay_days">Number of days</label>'
+    +           '<input class="form-control" id="stay_days" name="stay_days" type="number" min="1" max="365" value="' + (prefill.days ? esc(prefill.days) : '1') + '">'
+    +           '<div class="field-error" data-error-for="stay_days"></div></div>'
+    +       '</div>'
+    +     '</div>'
+
+    +     '<div class="col-12" style="margin-top:1rem"><label class="form-label" for="notes">Notes <span class="opt">(optional)</span></label>'
+    +       '<textarea class="form-control" id="notes" name="notes" rows="3" placeholder="Anything that helps us plan your visit."></textarea>'
+    +       '<div class="field-error" data-error-for="notes"></div></div>'
+
+    +     '<div class="form-banner" id="formBanner" role="alert" hidden></div>'
+    +     '<div class="register-actions">'
+    +       '<button class="btn btn-clay btn-lg" type="submit" id="submitBtn">'
+    +         '<span class="btn-label">Book this itinerary</span>'
+    +         '<span class="spinner-border spinner-border-sm btn-spinner" hidden aria-hidden="true"></span>'
+    +       '</button>'
+    +     '</div>'
+    +   '</form>'
+    + '</div></section>';
+  }
+
+  /* ----- Booking history (list) ------------------------------------------ */
+  function viewBookings(){
+    return ''
+    + '<section class="register"><div class="container register-inner">'
+    +   '<header class="register-head">'
+    +     '<h1 class="display-title">My bookings</h1>'
+    +     '<p class="register-tag">Your saved itineraries, newest first.</p>'
+    +   '</header>'
+    +   '<div id="bookingsStatus" class="cards-status" role="status">'
+    +     '<div class="spinner-border" aria-hidden="true"></div><span>Loading your bookings…</span>'
+    +   '</div>'
+    +   '<div id="bookingsList" aria-live="polite"></div>'
+    +   '<div class="register-actions">'
+    +     '<a class="btn btn-clay" href="#/itinerary">Plan a new trip</a>'
+    +   '</div>'
+    + '</div></section>';
+  }
+
+  /* ----- Single booking detail / confirmation ---------------------------- */
+  function viewBookingDetail(id){
+    var rows = [
+      ["Reference","p_id"],["Trip name","p_title"],["Visit date","p_visit_date"],
+      ["Travelers","p_travelers"],
+      ["Check-in date","p_checkin"],["Stay duration","p_stay_days"],["Check-out date","p_checkout"],
+      ["Notes","p_notes"],["Booked on","p_created"]
+    ].map(function(r){
+      return '<div class="profile-row"><span class="profile-key">'+r[0]+'</span>'
+           + '<span class="profile-val" id="'+r[1]+'"></span></div>';
+    }).join("");
+
+    return ''
+    + '<section class="confirm" data-booking-id="'+esc(id)+'"><div class="container confirm-inner">'
+    +   '<div id="confirmStatus" class="cards-status" role="status">'
+    +     '<div class="spinner-border" aria-hidden="true"></div><span>Fetching your booking…</span>'
+    +   '</div>'
+    +   '<div id="confirmContent" hidden>'
+    +     '<div class="confirm-badge">✓ Booked</div>'
+    +     '<h1 class="display-title">Your itinerary is saved</h1>'
+    +     '<p class="confirm-tag">Here\'s the trip we have on file for you.</p>'
+    +     '<div class="profile-card">'+rows+'</div>'
+    +     '<h2 class="section-title" style="font-size:1.4rem;margin:1.5rem 0 .75rem">Stops</h2>'
+    +     '<div id="bookingItems" class="profile-card"></div>'
+    +     '<div class="confirm-actions">'
+    +       '<a class="btn btn-clay" href="#/bookings">View all my bookings</a>'
+    +       '<a class="btn btn-outline-clay" href="#/itinerary">Plan another</a>'
+    +       '<button type="button" class="btn btn-outline-clay" id="cancelBookingBtn" data-id="'+esc(id)+'">Cancel this booking</button>'
+    +     '</div>'
+    +   '</div>'
+    +   '<div id="confirmError" class="form-banner" role="alert" hidden></div>'
+    + '</div></section>';
+  }
+
+  /* ----- "Please log in" gate ------------------------------------------- */
+  function viewAuthRequired(next){
+    var to = "#/login" + (next ? "?next=" + encodeURIComponent(next) : "");
+    return ''
+    + '<section class="register"><div class="container register-inner">'
+    +   '<header class="register-head">'
+    +     '<h1 class="display-title">Please log in</h1>'
+    +     '<p class="register-tag">You need an account to plan itineraries and view your bookings.</p>'
+    +   '</header>'
+    +   '<div class="register-actions">'
+    +     '<a class="btn btn-clay btn-lg" href="'+esc(to)+'">Log in</a>'
+    +     '<a class="btn btn-outline-clay btn-lg" href="#/signup">Create an account</a>'
+    +   '</div>'
+    + '</div></section>';
+  }
+
+  function viewDeveloperInfo(){
+    var cards = DEVELOPERS.members.map(function(m){
+      var ph = placeholderURI(m.name, 400, 400);
+      var src = m.image ? m.image : ph;
+      return ''
+      + '<div class="dev-card">'
+      +   '<div class="dev-photo">'
+      +     '<img src="'+esc(src)+'" alt="'+esc(m.name)+'" loading="lazy"'
+      +         ' onerror="this.onerror=null;this.src=\''+ph+'\'">'
+      +   '</div>'
+      +   '<p class="dev-name">'+esc(m.name)+'</p>'
+      +   '<p class="dev-role">'+esc(m.role)+'</p>'
+      + '</div>';
+    }).join("");
+
+    return ''
+    + '<section class="developers"><div class="container">'
+    +   '<header class="dev-header">'
+    +     '<span class="dev-group-badge">Group '+esc(DEVELOPERS.group)+'</span>'
+    +     '<h1 class="display-title">Developers</h1>'
+    +     '<p class="section-lead">The team behind this Ilocos Sur Tourism Portal.</p>'
+    +   '</header>'
+    +   '<div class="dev-grid">'+cards+'</div>'
+    + '</div></section>';
+  }
+
+  function view404(){
+    return ''
+    + '<section class="notfound"><div class="container text-center">'
+    +   '<h1 class="display-title">404</h1>'
+    +   '<p class="notfound-lead">That page wandered off the cobblestones. Let\'s get you back on the route.</p>'
+    +   '<a class="btn btn-clay btn-lg" href="#/">Return home</a>'
+    + '</div></section>';
+  }
+
+  /* AJAX Style Handlers */
+  // Category page: load the card grid asynchronously.
+  function loadCategoryCards(slug){
+    var grid = $("#cardGrid"), statusEl = $("#cardsStatus");
+    api.getAttractions(slug).then(function(data){
+      statusEl.hidden = true;
+      grid.innerHTML = "";
+      if (!data.items.length){
+        grid.innerHTML = '<p class="text-muted">Listings are coming soon.</p>';
+        return;
+      }
+      grid.innerHTML = data.items.map(function(item){
+        return ''
+        + '<article class="attraction-card">'
+        +   '<div class="attraction-media">'+imgTag(item, 640, 420, "")+'</div>'
+        +   '<h3 class="attraction-name">'+esc(item.name)+'</h3>'
+        +   '<p class="attraction-summary">'+esc(item.summary||"")+'</p>'
+        +   '<button class="see-info" type="button" data-id="'+esc(item.id)+'">See Info</button>'
+        + '</article>';
+      }).join("");
+
+      Array.prototype.forEach.call(grid.querySelectorAll(".see-info"), function(btn){
+        btn.addEventListener("click", function(){ openInfo(slug, btn.getAttribute("data-id")); });
+      });
+    }).catch(function(err){
+      statusEl.hidden = false;
+      statusEl.innerHTML = '<span>Couldn\'t load this category. ' + esc(err.message) + '</span>';
+    });
+  }
+
+  var infoModalInstance = null;
+  function getInfoModal(){
+    var node = $("#infoModal");
+    if (!infoModalInstance && window.bootstrap){
+      infoModalInstance = new bootstrap.Modal(node);
+      node.addEventListener("show.bs.modal", function(){ document.body.classList.add("info-modal-active"); });
+      node.addEventListener("hidden.bs.modal", function(){ document.body.classList.remove("info-modal-active"); });
+    }
+    return infoModalInstance;
+  }
+
+  // "See Info": fetch one item, fill the modal, open it (background blurs).
+  function openInfo(slug, id){
+    api.getItem(slug, id).then(function(item){
+      $("#infoImage").src = item.image ? item.image : placeholderURI(item.name, 640, 420);
+      $("#infoImage").alt = item.name;
+      $("#infoImage").onerror = function(){ this.onerror=null; this.src = placeholderURI(item.name, 640, 420); };
+      $("#infoModalLabel").textContent = item.name;
+      $("#infoLocation").textContent = item.location || "";
+      $("#infoAbout").textContent = item.about || item.summary || "";
+
+      var tags = $("#infoTags"); tags.innerHTML = "";
+      (item.tags||[]).forEach(function(t){
+        var chip = document.createElement("span");
+        chip.className = "info-chip"; chip.textContent = t; tags.appendChild(chip);
+      });
+
+      // Show hotel check-in fields for "Where to Stay" items
+      var hotelFields = document.getElementById("hotelFields");
+      var isStay = (slug === "stay");
+      if (hotelFields){
+        hotelFields.hidden = !isStay;
+        if (isStay){
+          document.getElementById("hotelCheckin").value = "";
+          document.getElementById("hotelCheckin").min = todayISO();
+          document.getElementById("hotelDays").value = "1";
+          document.getElementById("hotelCheckinErr").textContent = "";
+          document.getElementById("hotelDaysErr").textContent = "";
+        }
+      }
+
+      // Replace button node to drop stale listeners from any previous openInfo call
+      var oldBtn = document.getElementById("infoBook");
+      var freshBtn = oldBtn.cloneNode(true);
+      oldBtn.parentNode.replaceChild(freshBtn, oldBtn);
+      freshBtn.addEventListener("click", function(){
+        if (isStay){
+          var checkin = document.getElementById("hotelCheckin").value;
+          var days = parseInt(document.getElementById("hotelDays").value, 10);
+          var ok = true;
+          document.getElementById("hotelCheckinErr").textContent = "";
+          document.getElementById("hotelDaysErr").textContent = "";
+          if (!checkin){
+            document.getElementById("hotelCheckinErr").textContent = "Please enter a check-in date.";
+            ok = false;
+          } else if (checkin < todayISO()){
+            document.getElementById("hotelCheckinErr").textContent = "Check-in date cannot be in the past.";
+            ok = false;
+          }
+          if (isNaN(days) || days < 1){
+            document.getElementById("hotelDaysErr").textContent = "Please enter the number of days (at least 1).";
+            ok = false;
+          }
+          if (!ok) return;
+        }
+        var modal = getInfoModal(); if (modal) modal.hide();
+        location.hash = "#/itinerary?cat=" + encodeURIComponent(slug)
+          + "&add=" + encodeURIComponent(item.id)
+          + (isStay
+            ? "&checkin=" + encodeURIComponent(document.getElementById("hotelCheckin").value)
+              + "&days=" + encodeURIComponent(document.getElementById("hotelDays").value)
+            : "");
+      });
+
+      var m = getInfoModal();
+      if (m) m.show();
+    }).catch(function(err){
+      alert("Sorry, we couldn't open that item. " + err.message);
+    });
+  }
+
+  /* ----- shared form helpers (errors / loading / banner) ----------------- */
+  function makeFormHelpers(formScope){
+    var banner = $("#formBanner", formScope) || $("#formBanner");
+    var submitBtn = $("#submitBtn", formScope) || $("#submitBtn");
+    var spinner = submitBtn ? $(".btn-spinner", submitBtn) : null;
+    return {
+      setLoading: function(on){ if (submitBtn) submitBtn.disabled = on; if (spinner) spinner.hidden = !on; },
+      clearErrors: function(){
+        if (banner){ banner.hidden = true; banner.textContent = ""; }
+        Array.prototype.forEach.call(document.querySelectorAll(".field-error"), function(n){ n.textContent = ""; });
+        Array.prototype.forEach.call(document.querySelectorAll(".is-invalid-field"), function(n){ n.classList.remove("is-invalid-field"); });
+      },
+      showErrors: function(errs){
+        var self = this;
+        Object.keys(errs).forEach(function(field){
+          if (field === "_server"){ self.showBanner(errs[field]); return; }
+          var slot = document.querySelector('.field-error[data-error-for="'+field+'"]');
+          if (slot) slot.textContent = errs[field];
+          var input = document.getElementById(field);
+          if (input) input.classList.add("is-invalid-field");
+        });
+      },
+      showBanner: function(msg){ if (banner){ banner.hidden = false; banner.textContent = msg; } }
+    };
+  }
+  function val(id){ var n = document.getElementById(id); return n ? n.value.trim() : ""; }
+  function formatDate(iso){
+    if (!iso) return "—";
+    var d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
+    return d.toLocaleString(undefined, { year:"numeric", month:"short", day:"numeric", hour:"2-digit", minute:"2-digit" });
+  }
+
+  /* ----- Sign up handler ------------------------------------------------- */
+  function wireSignup(){
+    var form = $("#signupForm");
+    if (!form) return;
+    var h = makeFormHelpers(form);
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      h.clearErrors(); h.setLoading(true);
+      var payload = { full_name: val("su_full_name"), email: val("su_email"), password: document.getElementById("su_password").value };
+      api.signup(payload).then(function(d){
+        AUTH.user = d.user || null;
+        buildCategoryNav();
+        location.hash = "#/itinerary"; // straight to planning a trip
+      }).catch(function(err){
+        if (err && err.errors) h.showErrors(err.errors);
+        else h.showBanner("Something went wrong. Please try again.");
+        h.setLoading(false);
+      });
+    });
+  }
+
+  /* ----- Log in handler -------------------------------------------------- */
+  function wireLogin(next){
+    var form = $("#loginForm");
+    if (!form) return;
+    var h = makeFormHelpers(form);
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      h.clearErrors(); h.setLoading(true);
+      var payload = { email: val("li_email"), password: document.getElementById("li_password").value };
+      api.login(payload).then(function(d){
+        AUTH.user = d.user || null;
+        buildCategoryNav();
+        location.hash = next ? ("#/" + next.replace(/^#?\/?/, "")) : "#/bookings";
+      }).catch(function(err){
+        if (err && err.errors) h.showErrors(err.errors);
+        else if (err && err.status === 401) h.showBanner("Incorrect email or password.");
+        else h.showBanner("Something went wrong. Please try again.");
+        h.setLoading(false);
+      });
+    });
+
+    // Password show/hide toggle
+    var togglePwBtn = document.getElementById("togglePwBtn");
+    var pwField = document.getElementById("li_password");
+    if (togglePwBtn && pwField){
+      togglePwBtn.addEventListener("click", function(){
+        var show = pwField.type === "password";
+        pwField.type = show ? "text" : "password";
+        togglePwBtn.textContent = show ? "Hide" : "Show";
+      });
+    }
+
+    // Forgot password modal
+    var forgotPwBtn = document.getElementById("forgotPwBtn");
+    var fpModalEl = document.getElementById("forgotPwModal");
+    if (forgotPwBtn && fpModalEl && window.bootstrap){
+      var fpModal = new bootstrap.Modal(fpModalEl);
+      forgotPwBtn.addEventListener("click", function(){
+        var emailInput = document.getElementById("forgotPwEmail");
+        if (emailInput) emailInput.value = val("li_email");
+        var newPwInput = document.getElementById("forgotPwNew");
+        if (newPwInput) newPwInput.value = "";
+        var fpMsg = document.getElementById("forgotPwMsg");
+        if (fpMsg){ fpMsg.textContent = ""; fpMsg.style.color = ""; }
+        var fpSubmitReset = document.getElementById("forgotPwSubmit");
+        if (fpSubmitReset){ fpSubmitReset.disabled = false; fpSubmitReset.textContent = "Reset password"; }
+        fpModal.show();
+      });
+      var fpSubmit = document.getElementById("forgotPwSubmit");
+      if (fpSubmit){
+        fpSubmit.addEventListener("click", function(){
+          var email = (document.getElementById("forgotPwEmail").value || "").trim();
+          var newPw =  document.getElementById("forgotPwNew").value  || "";
+          var msg   =  document.getElementById("forgotPwMsg");
+          msg.textContent = "";
+          msg.style.color = "#b3261e";
+          if (!email || !EMAIL_RE.test(email)){
+            msg.textContent = "Please enter a valid email address.";
+            return;
+          }
+          if (newPw.length < 8){
+            msg.textContent = "New password must be at least 8 characters.";
+            return;
+          }
+          fpSubmit.disabled = true;
+          fpSubmit.textContent = "Resetting…";
+          api.resetPassword({ email: email, new_password: newPw }).then(function(){
+            fpSubmit.textContent = "Success";
+            msg.style.color = "var(--teal)";
+            msg.textContent = "Password reset successfully. You can now log in with your new password.";
+            setTimeout(function(){
+              var fpModalEl = document.getElementById("forgotPwModal");
+              var fpModalInst = bootstrap.Modal.getInstance(fpModalEl);
+              if (fpModalInst) fpModalInst.hide();
+            }, 1500);
+          }).catch(function(err){
+            fpSubmit.disabled = false;
+            fpSubmit.textContent = "Reset password";
+            if (err && err.status === 404){
+              msg.textContent = "No account found with that email address.";
+            } else if (err && err.errors){
+              msg.textContent = Object.values(err.errors).join(" ");
+            } else {
+              msg.textContent = (err && err.message) ? err.message : "Something went wrong. Please try again.";
+            }
+          });
+        });
+      }
+    }
+  }
+
+  /* ----- Itinerary builder handler --------------------------------------- */
+  // Keeps an in-memory list of chosen items; loads catalog items per category
+  // via AJAX; submits the whole itinerary as one booking. When the user arrives
+  // here from a "See Info" card (prefill.add = item id, prefill.cat = its
+  // category), that item is auto-added to the itinerary on load.
+  function wireItinerary(prefill){
+    prefill = prefill || {};
+    var form = $("#itineraryForm");
+    if (!form) return;
+    var h = makeFormHelpers(form);
+    var chosen = [];           // [{id, name, category}]
+    var picker = $("#pickCategory");
+    var pickGrid = $("#pickGrid");
+    var pickStatus = $("#pickStatus");
+    var listEl = $("#itinerary");
+
+    function renderList(){
+      if (!chosen.length){
+        listEl.innerHTML = '<div class="itin-empty">No stops yet, pick attractions.</div>';
+      } else {
+        listEl.innerHTML = chosen.map(function(it, i){
+          return '<div class="itin-item">'
+            + '<span class="itin-name">'+esc(it.name)+'</span>'
+            + '<button type="button" class="btn btn-outline-clay btn-sm" data-remove="'+i+'">Remove</button>'
+            + '</div>';
+        }).join("");
+        Array.prototype.forEach.call(listEl.querySelectorAll("[data-remove]"), function(btn){
+          btn.addEventListener("click", function(){
+            var idx = parseInt(btn.getAttribute("data-remove"), 10);
+            var removedId = chosen[idx].id;
+            chosen.splice(idx, 1);
+            renderList();
+            var pickerBtn = pickGrid.querySelector('[data-add="' + removedId + '"]');
+            if (pickerBtn){
+              pickerBtn.disabled = false;
+              pickerBtn.textContent = "Add to itinerary";
+            }
+          });
+        });
+      }
+      // Show the hotel stay section only when at least one "stay" item is chosen
+      var hotelSection = document.getElementById("hotelStaySection");
+      if (hotelSection){
+        hotelSection.hidden = !chosen.some(function(c){ return c.category === "stay"; });
+      }
+    }
+
+    function addItem(id, name, slug){
+      if (chosen.some(function(c){ return c.id === id; })) return false;
+      chosen.push({ id: id, name: name, category: slug });
+      renderList();
+      return true;
+    }
+
+    // autoAddId: if given, the matching card is added to the itinerary once the
+    // category's items have loaded (used by the See-Info redirect).
+    function loadPicker(slug, autoAddId){
+      pickStatus.textContent = "Loading…";
+      pickGrid.innerHTML = "";
+      api.getAttractions(slug).then(function(data){
+        pickStatus.textContent = "";
+        var items = data.items || [];
+
+        // Auto-add the redirected item before rendering, so its card shows as
+        // already added.
+        if (autoAddId){
+          for (var k = 0; k < items.length; k++){
+            if (items[k].id === autoAddId){ addItem(items[k].id, items[k].name, slug); break; }
+          }
+        }
+
+        pickGrid.innerHTML = items.map(function(item){
+          var already = chosen.some(function(c){ return c.id === item.id; });
+          return ''
+          + '<article class="attraction-card">'
+          +   '<div class="attraction-media">'+imgTag(item, 640, 420, "")+'</div>'
+          +   '<h3 class="attraction-name">'+esc(item.name)+'</h3>'
+          +   '<p class="attraction-summary">'+esc(item.summary||"")+'</p>'
+          +   '<button class="btn btn-outline-clay btn-sm" type="button" data-add="'+esc(item.id)+'" data-name="'+esc(item.name)+'" '+(already?'disabled':'')+'>'
+          +     (already ? "Added ✓" : "Add to itinerary")
+          +   '</button>'
+          + '</article>';
+        }).join("");
+        Array.prototype.forEach.call(pickGrid.querySelectorAll("[data-add]"), function(btn){
+          btn.addEventListener("click", function(){
+            if (addItem(btn.getAttribute("data-add"), btn.getAttribute("data-name"), slug)){
+              btn.disabled = true; btn.textContent = "Added ✓";
+            }
+          });
+        });
+      }).catch(function(err){
+        pickStatus.textContent = "Couldn't load: " + err.message;
+      });
+    }
+
+    picker.addEventListener("change", function(){ loadPicker(picker.value); });
+    renderList();
+
+
+    // On arrival: if redirected from a "See Info" card with a valid item +
+    // category, load that category and auto-check the item; otherwise load the
+    // currently selected category.
+    var addId = prefill.add ? String(prefill.add) : "";
+    if (addId && isValidCategory(picker.value)){
+      loadPicker(picker.value, addId);
+    } else {
+      loadPicker(picker.value);
+    }
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      h.clearErrors();
+      var today = todayISO();
+      var clientErrors = {};
+      var visitDateVal = val("visit_date");
+      if (visitDateVal && visitDateVal < today){
+        clientErrors.visit_date = "Visit date cannot be in the past.";
+      }
+      var hotelSecCheck = document.getElementById("hotelStaySection");
+      if (hotelSecCheck && !hotelSecCheck.hidden){
+        var checkinVal = val("checkin_date");
+        var stayDaysVal = val("stay_days");
+        if (!checkinVal){
+          clientErrors.checkin_date = "Check-in date is required.";
+        } else if (checkinVal < today){
+          clientErrors.checkin_date = "Check-in date cannot be in the past.";
+        }
+        if (!stayDaysVal || parseInt(stayDaysVal, 10) < 1){
+          clientErrors.stay_days = "Number of days must be at least 1.";
+        }
+      }
+      if (Object.keys(clientErrors).length){
+        h.showErrors(clientErrors);
+        return;
+      }
+      h.setLoading(true);
+      var payload = {
+        trip_title: val("trip_title"),
+        visit_date: val("visit_date"),
+        travelers: val("travelers"),
+        notes: val("notes"),
+        items: chosen.map(function(c){ return { id: c.id }; })
+      };
+      var hotelSec = document.getElementById("hotelStaySection");
+      if (hotelSec && !hotelSec.hidden){
+        payload.checkin_date = val("checkin_date");
+        payload.stay_days    = val("stay_days");
+      }
+      api.createBooking(payload).then(function(booking){
+        location.hash = "#/booking/" + booking.id;
+      }).catch(function(err){
+        if (err && err.status === 401){ location.hash = "#/login?next=itinerary"; return; }
+        if (err && err.errors) h.showErrors(err.errors);
+        else h.showBanner("Something went wrong. Please try again.");
+        h.setLoading(false);
+      });
+    });
+  }
+
+  /* ----- Booking history loader ------------------------------------------ */
+  function loadBookings(){
+    var statusEl = $("#bookingsStatus"), listEl = $("#bookingsList");
+
+    function render(bookings){
+      if (!bookings.length){
+        listEl.innerHTML = '<div class="profile-card"><div class="profile-row">'
+          + '<span class="profile-key">No bookings yet</span>'
+          + '<span class="profile-val">Plan your first itinerary!</span></div></div>';
+        return;
+      }
+      listEl.innerHTML = bookings.map(function(b){
+        return ''
+        + '<div class="booking-entry" style="margin-bottom:1rem">'
+        +   '<a class="profile-card" style="display:block;text-decoration:none;color:inherit" href="#/booking/'+esc(b.id)+'">'
+        +     '<div class="profile-row"><span class="profile-key">'+esc(b.trip_title)+'</span>'
+        +       '<span class="profile-val">'+ (b.item_count) +' stop'+(b.item_count===1?"":"s")+'</span></div>'
+        +     '<div class="profile-row"><span class="profile-key">Visit date</span>'
+        +       '<span class="profile-val">'+esc(b.visit_date || "—")+'</span></div>'
+        +     '<div class="profile-row"><span class="profile-key">Travelers</span>'
+        +       '<span class="profile-val">'+ (b.travelers != null ? esc(String(b.travelers)) : "—") +'</span></div>'
+        +     (b.checkin_date
+              ? '<div class="profile-row"><span class="profile-key">Check-in</span><span class="profile-val">'+esc(b.checkin_date)+'</span></div>'
+              + (b.stay_days != null
+                  ? '<div class="profile-row"><span class="profile-key">Stay</span><span class="profile-val">'+esc(String(b.stay_days))+' day(s)</span></div>'
+                  : '')
+              : '')
+        +     '<div class="profile-row"><span class="profile-key">Booked on</span>'
+        +       '<span class="profile-val">'+esc(formatDate(b.created_at))+'</span></div>'
+        +     '<div class="booking-actions">'
+        +       '<button type="button" class="btn btn-outline-clay btn-sm" data-cancel="'+esc(b.id)+'" data-title="'+esc(b.trip_title)+'">Cancel booking</button>'
+        +     '</div>'
+        +   '</a>'
+        + '</div>';
+      }).join("");
+
+      // Wire each cancel button. The button lives inside the card link, so we
+      // stop the click from navigating to the detail page before confirming.
+      Array.prototype.forEach.call(listEl.querySelectorAll("[data-cancel]"), function(btn){
+        btn.addEventListener("click", function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          var id = btn.getAttribute("data-cancel");
+          var title = btn.getAttribute("data-title") || "this booking";
+          confirmCancel(title, function() {
+            btn.disabled = true; btn.textContent = "Cancelling…";
+            api.cancelBooking(id).then(function(){
+              bookings = bookings.filter(function(x){ return x.id !== id; });
+              render(bookings);
+            }).catch(function(err){
+              btn.disabled = false; btn.textContent = "Cancel booking";
+              if (err && err.status === 401){ location.hash = "#/login"; return; }
+              window.alert("Could not cancel: " + err.message);
+            });
+          });
+        });
+      });
+    }
+
+    api.getBookings().then(function(d){
+      statusEl.hidden = true;
+      render(d.bookings || []);
+    }).catch(function(err){
+      statusEl.hidden = true;
+      listEl.innerHTML = '<div class="form-banner">Could not load your bookings: '+esc(err.message)+'</div>';
+    });
+  }
+
+  /* ----- Single booking detail loader ------------------------------------ */
+  function loadBookingDetail(id){
+    var statusEl = $("#confirmStatus"), content = $("#confirmContent"), errorEl = $("#confirmError");
+    var itemsEl = $("#bookingItems");
+    api.getBooking(id).then(function(b){
+      var dash = "—";
+      setText("p_id", b.id || dash);
+      setText("p_title", b.trip_title || dash);
+      setText("p_visit_date", b.visit_date || dash);
+      setText("p_travelers", b.travelers != null ? String(b.travelers) : dash);
+
+      // Hotel stay fields
+      setText("p_checkin", b.checkin_date || dash);
+      var stayDays = (b.stay_days != null) ? parseInt(String(b.stay_days), 10) : null;
+      setText("p_stay_days", stayDays ? stayDays + " day(s)" : dash);
+      if (b.checkin_date && stayDays) {
+        var coDate = new Date(b.checkin_date);
+        coDate.setDate(coDate.getDate() + stayDays);
+        setText("p_checkout", coDate.toISOString().slice(0, 10));
+      } else {
+        setText("p_checkout", dash);
+      }
+
+      setText("p_notes", b.notes || dash);
+      setText("p_created", formatDate(b.created_at));
+      itemsEl.innerHTML = (b.items||[]).map(function(it){
+        return '<div class="profile-row"><span class="profile-key">'+esc(it.name)+'</span>'
+             + '<span class="profile-val">'+esc(it.category || "")+'</span></div>';
+      }).join("") || '<div class="profile-row"><span class="profile-key">No stops recorded</span><span class="profile-val">—</span></div>';
+      statusEl.hidden = true; content.hidden = false;
+
+      // Wire the cancel button now that the content is visible.
+      var cancelBtn = document.getElementById("cancelBookingBtn");
+      if (cancelBtn){
+        cancelBtn.addEventListener("click", function(){
+          var title = b.trip_title || "this booking";
+          confirmCancel(title, function() {
+            cancelBtn.disabled = true; cancelBtn.textContent = "Cancelling…";
+            api.cancelBooking(id).then(function(){
+              location.hash = "#/bookings";
+            }).catch(function(err){
+              cancelBtn.disabled = false; cancelBtn.textContent = "Cancel this booking";
+              if (err && err.status === 401){ location.hash = "#/login"; return; }
+              window.alert("Could not cancel: " + err.message);
+            });
+          });
+        });
+      }
+    }).catch(function(err){
+      statusEl.hidden = true; errorEl.hidden = false;
+      errorEl.textContent = (err.status === 404)
+        ? "We couldn't find that booking. It may have been removed or the link is incorrect."
+        : (err.status === 401)
+          ? "Please log in to view this booking."
+          : "Could not load your booking: " + err.message;
+    });
+    function setText(id, t){ var n = document.getElementById(id); if (n) n.textContent = t; }
+  }
+
+  /* Categories Menu */
+  // Rebuilt whenever auth state changes so the account links stay accurate.
+  function buildCategoryNav(){
+    var nav = $("#catNav");
+    var html = '<a class="cat-link" data-route="home" href="#/">'
+           + '<span class="cat-link-title">Home</span>'
+           + '<span class="cat-link-tag">Back to the main page</span>'
+           + '</a>';
+    html += DATA.categories.map(function(c){
+      return '<a class="cat-link" data-route="category" data-slug="'+esc(c.slug)+'" href="#/'+c.slug+'">'
+           +   '<span class="cat-link-title">'+esc(c.title)+'</span>'
+           +   '<span class="cat-link-tag">'+esc(c.tagline)+'</span>'
+           + '</a>';
+    }).join("");
+
+    html += '<a class="cat-link" data-route="developers" href="#/developers">'
+          +   '<span class="cat-link-title">Developer Info</span>'
+          +   '<span class="cat-link-tag">Meet the team behind this portal</span>'
+          + '</a>';
+
+    // Account-aware section.
+    html += '<a class="cat-link cat-link--cta" data-route="itinerary" href="#/itinerary">'
+          +   '<span class="cat-link-title">Plan an Itinerary</span>'
+          +   '<span class="cat-link-tag">Build and book your Ilocos Sur trip</span>'
+          + '</a>';
+
+    if (AUTH.user){
+      html += '<a class="cat-link" data-route="bookings" href="#/bookings">'
+            +   '<span class="cat-link-title">My Bookings</span>'
+            +   '<span class="cat-link-tag">Your saved itineraries</span>'
+            + '</a>';
+      html += '<a class="cat-link" data-route="logout" href="#/logout">'
+            +   '<span class="cat-link-title">Log out</span>'
+            +   '<span class="cat-link-tag">Signed in as '+esc(AUTH.user.full_name || AUTH.user.email)+'</span>'
+            + '</a>';
+    } else {
+      html += '<a class="cat-link" data-route="login" href="#/login">'
+            +   '<span class="cat-link-title">Log in</span>'
+            +   '<span class="cat-link-tag">Access your bookings</span>'
+            + '</a>';
+      html += '<a class="cat-link" data-route="signup" href="#/signup">'
+            +   '<span class="cat-link-title">Sign up</span>'
+            +   '<span class="cat-link-tag">Create a free account</span>'
+            + '</a>';
+    }
+    nav.innerHTML = html;
+  }
+
+  function setActiveNav(route, slug){
+    Array.prototype.forEach.call(document.querySelectorAll("#catNav .cat-link"), function(a){
+      var match = a.getAttribute("data-route") === route
+        && (route !== "category" || a.getAttribute("data-slug") === slug);
+      a.classList.toggle("is-active", !!match);
+    });
+  }
+
+  function closeOverlays(){
+    if (!window.bootstrap) return;
+    var oc = $("#categoriesMenu"); var oi = bootstrap.Offcanvas.getInstance(oc);
+    if (oi) oi.hide();
+    var m = bootstrap.Modal.getInstance($("#infoModal"));
+    if (m) m.hide();
+  }
+
+  function parseHash(){
+    var h = (location.hash || "").replace(/^#/, "");
+    if (!h || h === "/") return { name: "home" };
+    var parts = h.split("?");
+    var path = parts[0], qs = parts[1] || "";
+    var query = {};
+    if (qs) qs.split("&").forEach(function(pair){
+      var kv = pair.split("="); query[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || "");
+    });
+    var segs = path.split("/").filter(Boolean);
+    if (!segs.length) return { name: "home" };
+    if (segs[0] === "login")       return { name: "login", query: query };
+    if (segs[0] === "signup")      return { name: "signup", query: query };
+    if (segs[0] === "logout")      return { name: "logout", query: query };
+    if (segs[0] === "itinerary")   return { name: "itinerary", query: query };
+    if (segs[0] === "bookings")    return { name: "bookings", query: query };
+    if (segs[0] === "booking")     return { name: "booking", id: segs[1], query: query };
+    if (segs[0] === "developers")  return { name: "developers", query: query };
+    // Back-compat: old links still resolve to the new equivalents.
+    if (segs[0] === "register")     return { name: "itinerary", query: query };
+    if (segs[0] === "confirmation") return { name: "booking", id: segs[1], query: query };
+    return { name: "category", slug: segs[0], query: query };
+  }
+
+  // Routes that require a logged-in user.
+  function isProtected(name){
+    return name === "itinerary" || name === "bookings" || name === "booking";
+  }
+
+  function render(){
+    var app = $("#app");
+    var r = parseHash();
+    buildCategoryNav();
+    closeOverlays();
+
+    // Logout is an action, not a view: clear the session, then go home.
+    if (r.name === "logout"){
+      app.innerHTML = '<section class="register"><div class="container register-inner">'
+        + '<header class="register-head"><h1 class="display-title">Logging out…</h1></header></div></section>';
+      api.logout().then(function(){
+        AUTH.user = null;
+        return loadCsrf(); // rotate to the new session's token
+      }).then(function(){
+        buildCategoryNav();
+        location.hash = "#/";
+      });
+      return;
+    }
+
+    // Guard protected routes: if not logged in, show the gate (and remember
+    // where the user wanted to go so login can send them back).
+    if (isProtected(r.name) && !AUTH.user){
+      var next = r.name === "booking" ? ("booking/" + (r.id||"")) : r.name;
+      app.innerHTML = viewAuthRequired(next);
+      setActiveNav(r.name, r.slug);
+      window.scrollTo(0, 0);
+      return;
+    }
+
+    if (r.name === "home"){
+      app.innerHTML = viewHome();
+    } else if (r.name === "login"){
+      app.innerHTML = viewLogin();
+      wireLogin((r.query && r.query.next) || "");
+    } else if (r.name === "signup"){
+      app.innerHTML = viewSignup();
+      wireSignup();
+    } else if (r.name === "itinerary"){
+      app.innerHTML = viewItinerary(r.query || {});
+      wireItinerary(r.query || {});
+    } else if (r.name === "bookings"){
+      app.innerHTML = viewBookings();
+      loadBookings();
+    } else if (r.name === "booking"){
+      app.innerHTML = viewBookingDetail(r.id);
+      loadBookingDetail(r.id);
+    } else if (r.name === "developers"){
+      app.innerHTML = viewDeveloperInfo();
+    } else if (r.name === "category" && isValidCategory(r.slug)){
+      app.innerHTML = viewCategory(r.slug);
+      loadCategoryCards(r.slug);
+    } else {
+      app.innerHTML = view404();
+    }
+
+    setActiveNav(r.name, r.slug);
+    window.scrollTo(0, 0);
+  }
+
+  /* Boot */
+  window.addEventListener("hashchange", render);
+  document.addEventListener("DOMContentLoaded", function(){
+    // Establish CSRF token + auth state first, then build nav and render once.
+    Promise.all([loadCsrf(), refreshAuth()]).then(function(){
+      buildCategoryNav();
+      render();
+    });
+  });
+})();
+  </script>
+</body>
+</html>
